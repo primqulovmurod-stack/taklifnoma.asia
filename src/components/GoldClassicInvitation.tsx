@@ -113,6 +113,18 @@ export default function GoldClassicInvitation({
     parseInt(time.split(':')[1]) || 0
   ).toISOString();
 
+  const firstDayOfMonth = new Date(
+    parseInt(year),
+    monthMap[monthName.toUpperCase()] || 3,
+    1
+  ).getDay();
+
+  const daysInMonth = new Date(
+    parseInt(year),
+    (monthMap[monthName.toUpperCase()] || 3) + 1,
+    0
+  ).getDate();
+
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-sans overflow-x-hidden selection:bg-[#D4AF37]/20 relative">
       <audio ref={audioRef} src={musicUrl} loop />
@@ -292,7 +304,12 @@ export default function GoldClassicInvitation({
               </div>
               
               <div className="grid grid-cols-7 gap-y-6 text-center items-center">
-                {[...Array(30)].map((_, i) => (
+                {/* Empty slots for month start padding */}
+                {[...Array(firstDayOfMonth)].map((_, i) => (
+                  <div key={`empty-${i}`} className="py-2" />
+                ))}
+
+                {[...Array(daysInMonth)].map((_, i) => (
                   <div key={i} className="relative py-2">
                     {i + 1 === day ? (
                       <div className="relative inline-flex items-center justify-center w-12 h-12">
