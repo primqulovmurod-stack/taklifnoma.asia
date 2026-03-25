@@ -281,13 +281,13 @@ export default function GoldClassicInvitation({
 
             <motion.div 
               {...fadeIn}
-              className="w-full max-w-lg bg-black/40 backdrop-blur-md p-12 rounded-3xl border border-[#D4AF37]/20 shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative"
+              className="w-full max-w-lg bg-black/40 backdrop-blur-md p-6 md:p-12 rounded-3xl border border-[#D4AF37]/20 shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative"
             >
               <div className="text-center mb-10 pb-6 border-b border-[#D4AF37]/10">
                 <h3 className={`text-3xl font-serif italic ${goldText} font-bold`}>{monthName} {year}</h3>
               </div>
               
-              <div className="grid grid-cols-7 gap-4 text-center text-[11px] font-bold text-[#D4AF37] opacity-60 mb-8 tracking-widest">
+              <div className="grid grid-cols-7 gap-1 md:gap-4 text-center text-[9px] md:text-[11px] font-bold text-[#D4AF37] opacity-60 mb-8 tracking-[0.2em]">
                 <span>YAK</span><span>DUSH</span><span>SESH</span><span>CHOR</span><span>PAY</span><span>JUM</span><span>SHAN</span>
               </div>
               
@@ -299,9 +299,9 @@ export default function GoldClassicInvitation({
                         <motion.div 
                           initial={{ scale: 0, rotate: -45 }}
                           whileInView={{ scale: 1, rotate: 0 }}
-                          className={`absolute inset-0 ${goldGradient} rounded-xl shadow-lg shadow-[#D4AF37]/40`}
+                          className={`absolute inset-0 ${goldGradient} rounded-lg shadow-lg shadow-[#D4AF37]/40`}
                         />
-                        <span className="text-black font-bold text-lg relative z-10">{i + 1}</span>
+                        <span className="text-black font-bold text-base md:text-lg relative z-10">{i + 1}</span>
                         <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[#D4AF37] drop-shadow-md">
                             <Heart size={18} fill="currentColor" />
                         </div>
@@ -453,8 +453,8 @@ export default function GoldClassicInvitation({
                        </div>
                        <div className="flex justify-between items-end border-t border-white/10 pt-4 gap-2">
                           <div className="min-w-0 pr-2">
-                             <p className="text-[8px] font-bold tracking-[0.3em] text-[#D4AF37]/60 uppercase mb-1">KARTA EGASI</p>
-                             <p className="text-lg font-serif italic text-white/90 truncate drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                             <p className="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37]/80 uppercase mb-1">KARTA EGASI</p>
+                             <p className={`text-xl font-serif italic ${goldText} drop-shadow-md`}>
                                {groomName || "Kenjabek"}
                              </p>
                           </div>
