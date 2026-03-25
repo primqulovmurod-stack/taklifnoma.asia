@@ -1,29 +1,36 @@
-'use client';
+import { headers } from 'next/headers';
+import { Metadata } from 'next';
+import InvitationWrapper from './InvitationWrapper';
 
-import React, { useState, useEffect } from 'react';
-import RolexLuxuryInvitation from '@/components/RolexLuxuryInvitation';
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+  const isPink = host.includes('pink');
 
-export default function Page() {
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  if (!mounted) return null;
+  if (isPink) {
+    return {
+      title: "Xurshidbek & Mohinur - Nikoh to'yi (Pink Edition)",
+      description: "Bizning baxtli kunimizga lutfan taklif etamiz!",
+      openGraph: {
+        title: "Xurshidbek & Mohinur - Nikoh to'yi",
+        description: "Eng baxtli kunimizda biz bilan bo'ling!",
+        images: ['/assets/floral.png'],
+      }
+    };
+  }
 
-  return (
-    <div className="bg-[#f8f8f8] min-h-screen">
-      <RolexLuxuryInvitation 
-        groomName="Xurshidbek"
-        brideName="Mohinur"
-        date="20 Iyun 2026"
-        time="18:00"
-        locationName="Oqsaroy Koshonasi"
-        locationAddress="Surxondaryo viloyati, Sho'rchi tumani"
-        imageUrl="https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg"
-        musicUrl="https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-MP3-File.mp3"
-      />
-    </div>
-  );
+  return {
+    title: "Xurshid & Mohinur - Nikoh to'yi",
+    description: "Sizni eng baxtli kunimizga lutfan taklif etamiz!",
+    openGraph: {
+      images: ['/assets/og-preview.jpg'],
+    }
+  };
+}
+
+export default async function Page() {
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+
+  return <InvitationWrapper initialHost={host} />;
 }
