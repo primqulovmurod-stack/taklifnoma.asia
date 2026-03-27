@@ -35,11 +35,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kenjabek-sofiya-goldclassic.vercel.app"),
-  title: "Kenjabek & Sofiya - Nikoh to'yi",
+  metadataBase: new URL("https://kenjabek-gold-white.vercel.app"),
+  title: "Kenjabek & Safiya - Nikoh to'yi",
   description: "Bizning baxtli kunimizga lutfan taklif etamiz!",
   openGraph: {
-    title: "Kenjabek & Sofiya - Nikoh to'yi",
+    title: "Kenjabek & Safiya - Nikoh to'yi",
     description: "Bizning baxtli kunimizga lutfan taklif etamiz!",
     siteName: "taklifnoma.ai",
     locale: "uz_UZ",
@@ -49,13 +49,13 @@ export const metadata: Metadata = {
         url: "/assets/og-preview.jpg",
         width: 1200,
         height: 630,
-        alt: "Kenjabek & Sofiya Nikoh to'yi",
+        alt: "Kenjabek & Safiya Nikoh to'yi",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kenjabek & Sofiya - Nikoh to'yi",
+    title: "Kenjabek & Safiya - Nikoh to'yi",
     description: "Bizning baxtli kunimizga lutfan taklif etamiz!",
     images: ["/assets/og-preview.jpg"],
   },
