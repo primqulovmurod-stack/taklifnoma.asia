@@ -16,8 +16,8 @@ export default function InvitationWrapper({ initialHost }: InvitationWrapperProp
   const [theme, setTheme] = useState<'rolex' | 'pink' | 'watch' | 'goldclassic' | 'goldwhite'>(
     initialHost.includes('pink') ? 'pink' : 
     initialHost.includes('watch') ? 'watch' : 
-    initialHost.includes('goldwhite') ? 'goldwhite' : 
-    initialHost.includes('goldclassic') || initialHost.includes('gold') ? 'goldclassic' : 'rolex'
+    initialHost.includes('goldwhite') || initialHost.includes('gold-white') || initialHost.includes('white') ? 'goldwhite' : 
+    initialHost.includes('gold') ? 'goldclassic' : 'rolex'
   );
 
   useEffect(() => {
@@ -30,9 +30,9 @@ export default function InvitationWrapper({ initialHost }: InvitationWrapperProp
       setTheme('pink');
     } else if (themeParam === 'watch' || window.location.hostname.includes('watch')) {
       setTheme('watch');
-    } else if (themeParam === 'goldwhite' || window.location.hostname.includes('goldwhite')) {
+    } else if (themeParam === 'goldwhite' || window.location.hostname.includes('goldwhite') || window.location.hostname.includes('gold-white') || window.location.hostname.includes('white')) {
       setTheme('goldwhite');
-    } else if (themeParam === 'goldclassic' || window.location.hostname.includes('goldclassic') || window.location.hostname.includes('gold')) {
+    } else if (themeParam === 'goldclassic' || window.location.hostname.includes('gold')) {
       setTheme('goldclassic');
     } else {
       setTheme('rolex');
