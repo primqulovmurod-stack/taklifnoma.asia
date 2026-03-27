@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
 
-  if (host.includes('gold') || host.includes('white') || host.includes('localhost')) {
+  if (host.includes('gold') || host.includes('white') || host.includes('rus') || host.includes('localhost')) {
     return {
       title: "Кенжабек и София - Свадебное приглашение",
       description: "Приглашаем вас на наш самый счастливый день!",
