@@ -142,14 +142,17 @@ export default function AdminPanel() {
                         ) : filtered.map((inv) => (
                             <tr key={inv.id} className="hover:bg-gray-50/30 transition-colors">
                                 <td className="px-8 py-6">
-                                    <div className="space-y-1 group">
+                                    <div className="space-y-1 group relative z-10">
                                         <p className="font-mono text-[10px] font-bold text-gray-400 uppercase tracking-tighter">#{inv.id}</p>
                                         <a 
-                                            href={`/${inv.slug}`} 
-                                            target="_blank" 
-                                            className="text-sm font-black text-[#E11D48] flex items-center gap-2 hover:underline decoration-2 underline-offset-4 group-hover:scale-105 transition-transform origin-left"
+                                            href={`/${inv.slug}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sm font-black text-[#E11D48] flex items-center gap-2 hover:text-[#BE123C] transition-all cursor-pointer relative z-20"
+                                            onClick={(e) => e.stopPropagation()}
                                         >
-                                            {inv.slug} <ExternalLink size={12} className="opacity-50" />
+                                            <span className="hover:underline decoration-2 underline-offset-4">{inv.slug}</span>
+                                            <ExternalLink size={14} className="opacity-70" />
                                         </a>
                                     </div>
                                 </td>
