@@ -34,20 +34,53 @@ export default function AdminPanel() {
     }
   };
 
-  const toggleStatus = (id: string) => {
-    const updated = invitations.map(inv => {
-        if (inv.id === id) return { ...inv, is_paid: !inv.is_paid };
-        return inv;
-    });
-    setInvitations(updated);
-    localStorage.setItem('taklifnoma_invitations', JSON.stringify(updated));
+  const toggleStatus = async (id: string, currentStatus: boolean) => {
+    try {
+        const { error } = await supabase
+            .from('invitations')
+            .update({ is_paid: !currentStatus })
+            .eq('id', id);
+            
+        if (error) throw error;
+        
+        // Refresh local state
+        setInvitations(prev => prev.map(inv => 
+            inv.id === id ? { ...inv, is_paid: !currentStatus } : inv
+        ));
+        
+        // Final fallback to localStorage sync
+        const updatedLocal = invitations.map(inv => 
+             inv.id === id ? { ...inv, is_paid: !currentStatus } : inv
+        );
+        localStorage.setItem('taklifnoma_invitations', JSON.stringify(updatedLocal));
+        
+    } catch (err) {
+        console.error('Update error:', err);
+        alert('Bazani yangilashda xatolik yuz berdi.');
+    }
   };
 
-  const deleteInvite = (id: string) => {
+  const deleteInvite = async (id: string) => {
     if (confirm('Ushbu taklifnomani bazadan butunlay o\'chirmoqchimisiz?')) {
-        const updated = invitations.filter(inv => inv.id !== id);
-        setInvitations(updated);
-        localStorage.setItem('taklifnoma_invitations', JSON.stringify(updated));
+        try {
+            const { error } = await supabase
+                .from('invitations')
+                .delete()
+                .eq('id', id);
+                
+            if (error) throw error;
+            
+            // Refresh local state
+            setInvitations(prev => prev.filter(inv => inv.id !== id));
+            
+            // Local fallback
+            const remainingLocal = invitations.filter(inv => inv.id !== id);
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(remainingLocal));
+            
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('O\'chirishda xatolik yuz berdi.');
+        }
     }
   };
 
@@ -121,7 +154,7 @@ export default function AdminPanel() {
                                 </td>
                                 <td className="px-8 py-6">
                                     <button 
-                                        onClick={() => toggleStatus(inv.id)}
+                                        onClick={() => toggleStatus(inv.id, inv.is_paid)}
                                         className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${
                                             inv.is_paid 
                                             ? 'bg-green-50 text-green-600 border border-green-100' 

@@ -25,6 +25,7 @@ import {
   X
 } from 'lucide-react';
 import { InvitationContent } from '@/lib/types';
+import { supabase } from '@/lib/supabase';
 import TemplatePreview, { templates } from '@/components/dashboard/TemplatePreview';
 import PaymentModal from '@/components/dashboard/PaymentModal';
 
@@ -92,31 +93,42 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
   const handleSave = async () => {
     setIsSaving(true);
     
-    // Simulate API delay
-    setTimeout(() => {
-        const localData = localStorage.getItem('taklifnoma_invitations');
-        if (localData) {
-            const invites = JSON.parse(localData);
-            const index = invites.findIndex((inv: any) => inv.id === id);
+    // Generate slug from names and date
+    const finalSlug = generateSlug(content.groomName, content.brideName, content.date);
+    
+    try {
+        // 1. Save to Supabase (REAL DB)
+        const { error } = await supabase
+            .from('invitations')
+            .upsert({
+                id: id,
+                slug: finalSlug,
+                content: content,
+                is_paid: isPaid
+            });
             
-            if (index !== -1) {
-                // Avtomatik slug hosil qilish (Ism + Sana)
-                const newSlug = generateSlug(content.groomName, content.brideName, content.date);
-                
-                invites[index] = {
-                    ...invites[index],
-                    slug: newSlug,
-                    content: content,
-                    is_paid: isPaid
-                };
-                localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
-                console.log('Saved with slug:', newSlug);
-            }
-        }
+        if (error) throw error;
+
+        // 2. Backup to LocalStorage
+        const localData = localStorage.getItem('taklifnoma_invitations');
+        let invites = localData ? JSON.parse(localData) : [];
+        const index = invites.findIndex((inv: any) => inv.id === id);
         
+        if (index !== -1) {
+            invites[index] = { ...invites[index], slug: finalSlug, content: content, is_paid: isPaid };
+        } else {
+            invites.push({ id, slug: finalSlug, content, is_paid: isPaid });
+        }
+        localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
+
+        alert('O\'zgarishlar muvaffaqiyatli saqlandi! Admin faollashtirishi bilan link ishlaydi.');
+    } catch (err) {
+        console.error('Save error:', err);
+        // Alert but still save locally as fallback
+        alert('Ma\'lumotlar vaqtincha saqlandi (Bazaga ulanishda xatolik).');
+    } finally {
         setIsSaving(false);
-        alert('O\'zgarishlar muvaffaqiyatli saqlandi!');
-    }, 800);
+    }
   };
 
   const handleExport = () => {

@@ -4,68 +4,90 @@ import React, { use, useEffect, useState } from 'react';
 import TemplatePreview from '@/components/dashboard/TemplatePreview';
 import { InvitationContent } from '@/lib/types';
 import { notFound } from 'next/navigation';
-
-// Mock fetching function
-const getInvitationBySlug = async (slug: string) => {
-  // In production: fetch from Supabase
-  const mockData: Record<string, InvitationContent> = {
-    'ali-laylo': {
-      groomName: 'Ali',
-      brideName: 'Laylo',
-      date: '24 - MAY - 2026',
-      time: '18:00',
-      locationName: 'Tantana Milliy Taomlar',
-      locationUrl: '#',
-      imageUrl: '',
-      musicUrl: '',
-      theme: 'gold-white',
-      locationAddress: 'Toshkent shahar'
-    },
-    'behzod-dilfuza': {
-      groomName: 'Behzod',
-      brideName: 'Dilfuza',
-      date: '20 - IYUN - 2026',
-      time: '19:00',
-      locationName: 'Navro\'z To\'yxonasi',
-      locationUrl: '#',
-      imageUrl: '',
-      musicUrl: '',
-      theme: 'floral',
-      locationAddress: 'Samarqand shahar'
-    }
-  };
-
-  return mockData[slug] || null;
-};
+import { supabase } from '@/lib/supabase';
+import { Heart, Clock, Send, Lock } from 'lucide-react';
 
 export default function InvitationPage({ params }: { params: Promise<{ slug: string }> }) {
   const unwrappedParams = use(params);
   const slug = unwrappedParams.slug;
-  const [content, setContent] = useState<InvitationContent | null>(null);
+  const [invitation, setInvitation] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getInvitationBySlug(slug).then(data => {
-      setContent(data);
-      setLoading(false);
-    });
+    const fetchInvitation = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('invitations')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+
+        if (error) {
+          console.error('Fetch error:', error);
+          setInvitation(null);
+        } else {
+          setInvitation(data);
+        }
+      } catch (err) {
+        console.error(err);
+        setInvitation(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvitation();
   }, [slug]);
 
   if (loading) {
      return (
-        <div className="min-h-screen flex items-center justify-center bg-white">
-            <div className="w-12 h-12 border-4 border-[#B8962E] border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-screen flex items-center justify-center bg-[#FFF9FA]">
+            <div className="w-16 h-16 border-4 border-[#E11D48] border-t-transparent rounded-full animate-spin"></div>
         </div>
      );
   }
 
-  if (!content) {
+  // Not found
+  if (!invitation) {
     return notFound();
   }
 
+  // Not paid / Not activated
+  if (!invitation.is_paid) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FFF9FA] p-6 text-center">
+        <div className="max-w-md w-full bg-white p-12 rounded-[3.5rem] shadow-2xl border border-[#FFE4E6] space-y-10">
+            <div className="w-24 h-24 bg-[#E11D48]/5 rounded-3xl flex items-center justify-center text-[#E11D48] mx-auto animate-pulse">
+                <Clock size={48} />
+            </div>
+            
+            <div className="space-y-4">
+                <h1 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">Faollashtirish kutilmoqda</h1>
+                <p className="text-gray-400 font-medium leading-relaxed">
+                   Ushbu taklifnoma hozircha admin tomonidan faollashtirilmagan. To'lov tasdiqlangandan so'ng 10 daqiqa ichida ishga tushadi.
+                </p>
+            </div>
+
+            <div className="pt-6 border-t border-gray-50 space-y-4">
+                <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Agar siz taklifnoma egasi bo'lsangiz:</p>
+                <a 
+                  href="https://t.me/taklifnoma_asia" 
+                  target="_blank"
+                  className="flex items-center justify-center gap-3 w-full py-5 bg-[#E11D48] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-[#E11D48]/20 hover:scale-105 transition-all"
+                >
+                  <Send size={16} /> Admin bilan bog'lanish
+                </a>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Paid and Activated
   return (
     <div className="min-h-screen">
-      <TemplatePreview content={content} />
+      <TemplatePreview content={invitation.content} />
     </div>
   );
 }
