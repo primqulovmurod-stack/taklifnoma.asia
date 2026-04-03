@@ -81,6 +81,29 @@ export default function RootLayout({
     >
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" />
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "Taklifnoma.Asia",
+                    "operatingSystem": "Web",
+                    "applicationCategory": "DesignApplication",
+                    "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": "4.9",
+                        "ratingCount": "1240"
+                    },
+                    "offers": {
+                      "@type": "Offer",
+                      "price": "190000",
+                      "priceCurrency": "UZS"
+                    },
+                    "description": "Eng chiroyli va interaktiv virtual taklifnomalar yaratish xizmati O'zbekistonda."
+                })
+            }}
+        />
       </head>
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <Providers>

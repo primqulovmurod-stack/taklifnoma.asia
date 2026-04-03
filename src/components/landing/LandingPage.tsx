@@ -129,7 +129,8 @@ const LandingPage = () => {
         {/* Services Section - RESTORED INFO */}
         <section id="xizmatlar" className="py-32 bg-white dark:bg-[#050505]">
             <div className="max-w-7xl mx-auto px-6 text-center space-y-4 mb-20">
-                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Nima uchun online taklifnoma?</h2>
+                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Nega aynan Online Taklifnoma?</h2>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.4em]">Eng zamonaviy raqamli imkoniyatlar</p>
                 <div className="w-20 h-1.5 bg-[#E11D48] mx-auto rounded-full" />
             </div>
 
@@ -151,10 +152,11 @@ const LandingPage = () => {
             </div>
         </section>
 
-        {/* Samples Section - RESTORED INFO */}
+        {/* Samples Section - OPTIMIZED FOR TAKLIFNOMA KEYWORD */}
         <section id="namunalar" className="py-32 bg-[#FFF9FA] dark:bg-[#121212]">
             <div className="max-w-7xl mx-auto px-6 text-center space-y-4 mb-20">
-                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Namunalarimiz</h2>
+                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Eng Go'zal Taklifnoma Namunalarimiz</h2>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.4em]">Virtual taklifnoma shablonlari to'plami</p>
                 <div className="w-20 h-1.5 bg-[#E11D48] mx-auto rounded-full" />
             </div>
 
@@ -227,7 +229,8 @@ const LandingPage = () => {
         {/* Process Section - RESTORED INFO */}
         <section className="py-32 bg-white dark:bg-[#050505]">
             <div className="max-w-7xl mx-auto px-6 text-center space-y-4 mb-20">
-                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Buyurtma berish</h2>
+                <h2 className="text-4xl md:text-5xl font-playfair font-black dark:text-white tracking-tighter uppercase">Taklifnoma yaratish jarayoni</h2>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.4em]">3 oddiy qadamda tayyorlang</p>
                 <div className="w-20 h-1.5 bg-[#E11D48] mx-auto rounded-full" />
             </div>
 
