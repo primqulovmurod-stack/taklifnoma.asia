@@ -34,7 +34,6 @@ export default function DashboardLayout({
   const menuItems = [
     { name: 'Mening taklifnomalarim', icon: LayoutDashboard, href: '/dashboard' },
     { name: 'Yangi yaratish', icon: PlusCircle, href: '/dashboard/new' },
-    { name: "To'lovlar", icon: CreditCard, href: '/dashboard/billing' },
   ];
 
   if (loading) {
