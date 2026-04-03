@@ -22,7 +22,7 @@ interface GoldClassicInvitationProps {
   time?: string;
   locationName?: string;
   locationAddress?: string;
-  locationLink?: string;
+  locationUrl?: string;
   imageUrl?: string;
   musicUrl?: string;
 }
@@ -34,7 +34,7 @@ export default function GoldClassicInvitation({
   time = "19:00",
   locationName = "Demir (Asr)",
   locationAddress = "Sho'rchi tumani",
-  locationLink = "https://maps.google.com",
+  locationUrl = "https://maps.google.com",
   imageUrl = "https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg",
   musicUrl = "https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-MP3-File.mp3"
 }: GoldClassicInvitationProps) {
@@ -342,7 +342,7 @@ export default function GoldClassicInvitation({
 
                   <div className="pt-4">
                       <a 
-                          href={locationLink}
+                          href={locationUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`w-full h-14 gold-shimmer text-black font-bold tracking-[0.3em] uppercase text-[11px] shadow-[0_10px_40px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 rounded-full active:scale-95`}

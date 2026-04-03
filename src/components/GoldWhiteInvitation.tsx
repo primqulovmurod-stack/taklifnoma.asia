@@ -16,14 +16,14 @@ import {
   Send
 } from 'lucide-react';
 
-interface GoldClassicInvitationProps {
+interface GoldWhiteInvitationProps {
   groomName?: string;
   brideName?: string;
   date?: string;
   time?: string;
   locationName?: string;
   locationAddress?: string;
-  locationLink?: string;
+  locationUrl?: string;
   imageUrl?: string;
   musicUrl?: string;
 }
@@ -38,10 +38,10 @@ export default function GoldWhiteInvitation({
   time = "19:00",
   locationName = "Demir (Asr)",
   locationAddress = "Jizzax Shahar",
-  locationLink = "https://maps.google.com",
+  locationUrl = "https://maps.google.com",
   imageUrl = "https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg",
   musicUrl = "https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-MP3-File.mp3"
-}: GoldClassicInvitationProps) {
+}: GoldWhiteInvitationProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -324,7 +324,7 @@ export default function GoldWhiteInvitation({
 
                   <div className="pt-8">
                       <a 
-                          href={locationLink}
+                          href={locationUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`w-full h-14 gold-shimmer text-black font-bold tracking-[0.3em] uppercase text-[11px] shadow-sm flex items-center justify-center gap-4 rounded-full active:scale-95`}
