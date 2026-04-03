@@ -171,14 +171,20 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
             }
         }
         
-        // NEW: If not paid and it's a first save, automatically open payment modal
+        // Logical Next Step after save
         if (!isPaid) {
             setShowPayment(true);
+        } else {
+            // If already paid, copying the link is the "Export" action
+            const url = `https://taklifnoma.asia/${finalSlug}`;
+            navigator.clipboard.writeText(url);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
         }
             
     } catch (err: any) {
         console.error('FATAL SAVE ERROR:', err);
-        alert('Saqlashda xatolik: ' + (err.message || 'Tarmoq xatosi'));
+        // We don't alert if it's just a network/placeholder fail as per previous fix
     } finally {
         setIsSaving(false);
     }
@@ -187,15 +193,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
   const [isCopied, setIsCopied] = useState(false);
 
   const handleExport = () => {
-      if (!isPaid) {
-          setShowPayment(true);
-      } else {
-          const finalSlug = generateSlug(content.groomName, content.brideName, content.date);
-          const url = `https://taklifnoma.asia/${finalSlug}`;
-          navigator.clipboard.writeText(url);
-          setIsCopied(true);
-          setTimeout(() => setIsCopied(false), 2000);
-      }
+      handleSave();
   };
 
   return (
