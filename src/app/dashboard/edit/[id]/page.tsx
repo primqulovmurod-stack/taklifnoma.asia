@@ -69,17 +69,34 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
     return `${clean(groom)}-${clean(bride)}-${shortDate}`;
   };
 
-  // Load existing content from localStorage
+  // Load existing content from localStorage & Supabase
   useEffect(() => {
-    const localData = localStorage.getItem('taklifnoma_invitations');
-    if (localData) {
-        const invites = JSON.parse(localData);
-        const currentInvite = invites.find((inv: any) => inv.id === id);
-        if (currentInvite) {
-            setContent(currentInvite.content);
-            setIsPaid(currentInvite.is_paid);
+    const fetchData = async () => {
+        // 1. Try Supabase first (Master Source)
+        const { data, error } = await supabase
+            .from('invitations')
+            .select('*')
+            .eq('id', id)
+            .single();
+            
+        if (data && !error) {
+            setContent(data.content);
+            setIsPaid(data.is_paid);
+        } else {
+            // 2. Fallback to LocalStorage if offline or new
+            const localData = localStorage.getItem('taklifnoma_invitations');
+            if (localData) {
+                const invites = JSON.parse(localData);
+                const currentInvite = invites.find((inv: any) => inv.id === id);
+                if (currentInvite) {
+                    setContent(currentInvite.content);
+                    setIsPaid(currentInvite.is_paid);
+                }
+            }
         }
-    }
+    };
+    
+    fetchData();
   }, [id]);
 
   // Update content field
@@ -375,7 +392,8 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
         isOpen={showPayment} 
         onClose={() => setShowPayment(false)} 
         onSuccess={() => setIsPaid(true)} 
-        invitationId={`${content.groomName} va ${content.brideName} (${content.date})`}
+        isPaid={isPaid}
+        invitationId={generateSlug(content.groomName, content.brideName, content.date)}
       />
     </div>
   );
