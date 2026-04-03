@@ -24,7 +24,18 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
           .single();
 
         if (error) {
-          console.error('Fetch error:', error);
+          console.log('Not in DB, checking local storage...');
+          // Check local storage as fallback
+          const localData = typeof window !== 'undefined' ? localStorage.getItem('taklifnoma_invitations') : null;
+          if (localData) {
+            const invites = JSON.parse(localData);
+            const found = invites.find((inv: any) => inv.slug === slug);
+            if (found) {
+                setInvitation(found);
+                setLoading(false);
+                return;
+            }
+          }
           setInvitation(null);
         } else {
           setInvitation(data);

@@ -29,6 +29,14 @@ import { supabase } from '@/lib/supabase';
 import TemplatePreview, { templates } from '@/components/dashboard/TemplatePreview';
 import PaymentModal from '@/components/dashboard/PaymentModal';
 
+const MUSIC_TRACKS = [
+    { name: 'Die With A Smile (LADY GAGA)', url: '/assets/die_with_a_smile.mp3' },
+    { name: 'Million Atirgullar (Uzbek)', url: 'https://cdn.pixabay.com/audio/2022/03/15/audio_73f08985c4.mp3' },
+    { name: 'Classical Piano Wedding', url: 'https://cdn.pixabay.com/audio/2022/03/24/audio_34b5c777e4.mp3' },
+    { name: 'Romantic Guitar', url: 'https://cdn.pixabay.com/audio/2024/02/10/audio_51194380b2.mp3' },
+    { name: 'Soft Wedding Bells', url: 'https://www.youtube.com/watch?v=placeholder1' }
+];
+
 const INITIAL_CONTENT: InvitationContent = {
   groomName: 'Ali',
   brideName: 'Laylo',
@@ -331,6 +339,54 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
                   className="w-full px-8 py-4 bg-gray-50 border border-transparent rounded-[1.5rem] focus:ring-2 focus:ring-[#E11D48]/10 text-[10px] text-gray-400 font-mono overflow-ellipsis" 
                 />
               </div>
+            </div>
+          </section>
+
+          {/* Music Section - NEW */}
+          <section className="space-y-6">
+             <h3 className="text-[10px] font-black text-[#E11D48] uppercase tracking-[0.2em] flex items-center gap-2">
+                <Music size={14} /> Musiqa va Nizom
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                 <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-gray-900 uppercase">Musiqa ijrosi</p>
+                    <p className="text-[9px] text-gray-400 font-medium">Taklifnoma ochilganda musiqa qo'yilsinmi?</p>
+                 </div>
+                 <button 
+                   onClick={() => updateField('musicUrl', content.musicUrl ? '' : '/assets/die_with_a_smile.mp3')}
+                   className={`w-12 h-6 rounded-full transition-all relative ${content.musicUrl ? 'bg-[#E11D48]' : 'bg-gray-200'}`}
+                 >
+                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${content.musicUrl ? 'left-7' : 'left-1'}`} />
+                 </button>
+              </div>
+
+              {content.musicUrl !== '' && (
+                <div className="space-y-4">
+                    <div className="grid grid-cols-1 gap-2">
+                        {MUSIC_TRACKS.map(track => (
+                            <button
+                              key={track.url}
+                              onClick={() => updateField('musicUrl', track.url)}
+                              className={`p-4 rounded-2xl text-[10px] font-bold text-left transition-all border ${content.musicUrl === track.url ? 'bg-[#E11D48]/5 border-[#E11D48] text-[#E11D48]' : 'bg-white border-gray-100 text-gray-500 hover:bg-gray-50'}`}
+                            >
+                                {track.name}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    <div className="space-y-2">
+                        <label className="text-[9px] font-bold text-gray-400 uppercase ml-2">Maxsus Musiqa (MP3 Havola)</label>
+                        <input 
+                            type="text" 
+                            value={content.musicUrl || ''} 
+                            onChange={(e) => updateField('musicUrl', e.target.value)}
+                            placeholder="https://example.com/music.mp3"
+                            className="w-full px-6 py-4 bg-gray-50 rounded-2xl text-[10px] font-mono focus:ring-4 focus:ring-[#E11D48]/10 outline-none" 
+                        />
+                    </div>
+                </div>
+              )}
             </div>
           </section>
 
