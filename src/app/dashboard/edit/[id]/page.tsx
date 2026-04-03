@@ -196,9 +196,9 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen bg-[#FFF9FA] lg:overflow-hidden lg:h-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen bg-[#FFF9FA] lg:overflow-hidden relative">
       {/* Editor Pane */}
-      <div className={`w-full lg:w-[450px] bg-white border-r border-[#FFE4E6]/50 flex flex-col shadow-xl z-20 ${activeTab === 'preview' ? 'hidden lg:flex' : 'flex'} h-auto lg:h-full`}>
+      <div className={`w-full lg:w-[450px] bg-white border-r border-[#FFE4E6]/50 flex flex-col shadow-xl z-20 ${activeTab === 'preview' ? 'hidden lg:flex' : 'flex'} min-h-screen lg:h-full`}>
         <div className="p-6 border-b border-[#FFE4E6]/20 bg-white sticky top-0 z-30">
           <div className="flex items-center justify-between mb-4">
             <button 
@@ -238,7 +238,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
 
-        <div className="flex-1 lg:overflow-y-auto p-6 space-y-12 pb-32 no-scrollbar h-auto">
+        <div className="flex-1 lg:overflow-y-auto p-6 space-y-12 pb-40 no-scrollbar">
           {/* Names Section */}
           <section className="space-y-6">
             <h3 className="text-[10px] font-black text-[#E11D48] uppercase tracking-[0.2em] flex items-center gap-2">
@@ -369,8 +369,8 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
           </section>
         </div>
 
-        {/* Footer Action */}
-        <div className="p-6 border-t border-[#FFE4E6] bg-white sticky bottom-0 z-30 shadow-[0_-20px_40px_rgba(0,0,0,0.02)]">
+        {/* Footer Action - Desktop Only */}
+        <div className="hidden lg:block p-6 border-t border-[#FFE4E6] bg-white sticky bottom-0 z-30 shadow-[0_-20px_40px_rgba(0,0,0,0.02)]">
           <button 
             onClick={handleExport}
             className="group w-full py-5 bg-[#E11D48] text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(225,29,72,0.3)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
@@ -382,11 +382,11 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Preview Pane */}
-      <div className={`flex-1 bg-[#FFF9FA] flex items-center justify-center overflow-hidden h-screen bg-[radial-gradient(#FFE4E6_1px,transparent_1px)] [background-size:20px_20px] transition-all duration-500 ${activeTab === 'edit' ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`flex-1 bg-[#FFF9FA] flex items-center justify-center overflow-hidden lg:h-screen bg-[radial-gradient(#FFE4E6_1px,transparent_1px)] [background-size:20px_20px] transition-all duration-500 ${activeTab === 'edit' ? 'hidden lg:flex' : 'flex'} min-h-screen lg:min-h-0`}>
         <div className={`transition-all duration-1000 ease-in-out shadow-[0_80px_160px_-40px_rgba(0,0,0,0.3)] overflow-hidden relative transform translate-z-0 contain-layout ${
           isPreviewMobile 
-          ? 'w-[320px] md:w-[375px] h-[667px] md:h-[812px] rounded-[3.5rem] border-[12px] border-gray-950 ring-[15px] ring-[#E11D48]/10' 
-          : 'w-[90%] h-[85%] rounded-[2rem] border-[12px] border-gray-950 ring-[15px] ring-[#E11D48]/10'
+          ? 'w-full lg:w-[375px] h-full lg:h-[812px] lg:rounded-[3.5rem] lg:border-[12px] lg:border-gray-950 lg:ring-[15px] lg:ring-[#E11D48]/10' 
+          : 'w-full h-full lg:w-[90%] lg:h-[85%] lg:rounded-[2rem] lg:border-[12px] lg:border-gray-950 lg:ring-[15px] lg:ring-[#E11D48]/10'
         }`}>
           {/* Phone Details */}
           {isPreviewMobile && (
@@ -398,7 +398,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
             </>
           )}
 
-          <div className="w-full h-full overflow-y-auto no-scrollbar bg-white rounded-[2rem] lg:rounded-[1rem]">
+          <div className="w-full h-full overflow-y-auto no-scrollbar bg-white">
             <TemplatePreview content={content} />
           </div>
 
@@ -413,20 +413,33 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Mobile Navigation Tabs */}
-      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t border-[#EAD0A8]/20 flex z-[150] h-20 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#FFE4E6]/50 flex z-[150] pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
           <button 
             onClick={() => setActiveTab('edit')}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-all ${activeTab === 'edit' ? 'text-[#B8962E]' : 'text-gray-400'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-4 transition-all ${activeTab === 'edit' ? 'text-[#E11D48]' : 'text-gray-400'}`}
           >
-              <Settings size={20} className={activeTab === 'edit' ? 'scale-110' : ''} />
+              <div className={`p-2 rounded-xl transition-all ${activeTab === 'edit' ? 'bg-[#E11D48]/10' : 'bg-transparent'}`}>
+                <Settings size={22} />
+              </div>
               <span className="text-[9px] font-black uppercase tracking-widest">Tahrirlash</span>
           </button>
-          <div className="w-px h-10 bg-gray-100 self-center" />
+          
+          <div className="relative flex items-center justify-center -top-6">
+              <button 
+                onClick={handleSave}
+                className="w-14 h-14 bg-[#E11D48] rounded-full flex items-center justify-center text-white shadow-xl shadow-[#E11D48]/30 active:scale-90 transition-all border-4 border-white"
+              >
+                  {isSaving ? <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" /> : <Save size={24} />}
+              </button>
+          </div>
+
           <button 
             onClick={() => setActiveTab('preview')}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-all ${activeTab === 'preview' ? 'text-[#B8962E]' : 'text-gray-400'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-4 transition-all ${activeTab === 'preview' ? 'text-[#E11D48]' : 'text-gray-400'}`}
           >
-              <Eye size={20} className={activeTab === 'preview' ? 'scale-110' : ''} />
+              <div className={`p-2 rounded-xl transition-all ${activeTab === 'preview' ? 'bg-[#E11D48]/10' : 'bg-transparent'}`}>
+                <Eye size={22} />
+              </div>
               <span className="text-[9px] font-black uppercase tracking-widest">Ko'rish</span>
           </button>
       </div>
