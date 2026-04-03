@@ -16,71 +16,53 @@ import StitchInvitation from '@/components/StitchInvitation/Main';
 
 export const templates = [
   { 
-    id: 'gold-white', 
-    name: 'Premium Oq-Oltin', 
-    image: '/assets/gold_white_invite_mockup.png',
-    style: 'Elegant & Klassik'
-  },
-  { 
-    id: 'floral', 
-    name: 'Pushti Atirgul', 
-    image: '/assets/pink_invite_mockup.png',
-    style: 'Nozik & Romantik'
-  },
-  { 
-    id: 'goldclassic', 
-    name: 'Klassik Oltin', 
-    image: '/assets/gold_white_invite_mockup.png',
-    style: 'Eksklyuziv'
-  },
-  { 
     id: 'rolex', 
-    name: 'Rolex Luxury', 
-    image: '/assets/rolex_invite_mockup.png',
+    name: 'Rolex Luxury Edition', 
+    image: 'https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg',
     style: 'Zamonaviy & Hashamatli'
   },
   { 
-    id: 'milliy', 
-    name: 'Milliy Ornament', 
-    image: '/assets/gold_white_invite_mockup.png',
-    style: 'An\'anaviy'
+    id: 'pink-white', 
+    name: 'Pink Romance Edition', 
+    image: 'https://images.pexels.com/photos/1035665/pexels-photo-1035665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Nozik & Romantik'
   },
   { 
-    id: 'pink-luxury', 
-    name: 'Pushti Luxury', 
-    image: '/assets/pink_invite_mockup.png',
-    style: 'Nozik Luxury'
-  },
-  { 
-    id: 'watch-design', 
-    name: 'Watch Design', 
-    image: '/assets/rolex_invite_mockup.png',
-    style: 'Premium Soat Dizayn'
-  },
-  { 
-    id: 'elegant', 
-    name: 'Premium Oq-Oltin (Elite)', 
-    image: '/assets/gold_white_invite_mockup.png',
-    style: 'Elite Klasik'
+    id: 'gold-white', 
+    name: 'Gold & White Classic', 
+    image: 'https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Elegant & Klassik'
   },
   { 
     id: 'luxury-dark', 
     name: 'Luxury Dark Edition', 
-    image: '/assets/rolex_invite_mockup.png',
+    image: 'https://images.pexels.com/photos/169190/pexels-photo-169190.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     style: 'Modern Dark'
   },
   { 
-    id: 'pink-white', 
-    name: 'Nozik Pushti (Romantik)', 
-    image: '/assets/pink_invite_mockup.png',
-    style: 'Romantik'
+    id: 'milliy', 
+    name: 'Milliy Ornament', 
+    image: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'An\'anaviy'
   },
   { 
-    id: 'stitch', 
-    name: 'Minimal & Tab (Stitch)', 
-    image: '/assets/gold_white_invite_mockup.png',
-    style: 'Premium Tabli Dizayn'
+    id: 'pink-luxury', 
+    name: 'Pink Luxury Special', 
+    image: 'https://images.pexels.com/photos/1035665/pexels-photo-1035665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Pushti Premium'
   },
+  { 
+    id: 'goldclassic', 
+    name: 'Eksklyuziv Oltin', 
+    image: 'https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Elite Klasik'
+  },
+  { 
+    id: 'floral', 
+    name: 'Gullar Ifori', 
+    image: 'https://images.pexels.com/photos/3052646/pexels-photo-3052646.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Nozik Atirgullar'
+  }
 ];
 
 interface TemplatePreviewProps {
