@@ -158,8 +158,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
                 id: id,
                 slug: finalSlug,
                 content: content,
-                is_paid: isPaid,
-                updated_at: new Date().toISOString()
+                is_paid: isPaid
             });
             
         if (error) {
