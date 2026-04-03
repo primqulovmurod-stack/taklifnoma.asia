@@ -128,9 +128,9 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen bg-[#FFF9FA] lg:overflow-hidden">
+    <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen bg-[#FFF9FA] lg:overflow-hidden lg:h-screen">
       {/* Editor Pane */}
-      <div className={`w-full lg:w-[450px] bg-white border-r border-[#FFE4E6]/50 flex flex-col shadow-xl z-20 ${activeTab === 'preview' ? 'hidden lg:flex' : 'flex'} min-h-full`}>
+      <div className={`w-full lg:w-[450px] bg-white border-r border-[#FFE4E6]/50 flex flex-col shadow-xl z-20 ${activeTab === 'preview' ? 'hidden lg:flex' : 'flex'} h-auto lg:h-full`}>
         <div className="p-6 border-b border-[#FFE4E6]/20 bg-white sticky top-0 z-30">
           <div className="flex items-center justify-between mb-4">
             <button 
@@ -170,7 +170,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-12 pb-32 no-scrollbar">
+        <div className="flex-1 lg:overflow-y-auto p-6 space-y-12 pb-32 no-scrollbar h-auto">
           {/* Names Section */}
           <section className="space-y-6">
             <h3 className="text-[10px] font-black text-[#E11D48] uppercase tracking-[0.2em] flex items-center gap-2">
