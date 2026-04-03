@@ -150,11 +150,17 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
     }
   };
 
+  const [isCopied, setIsCopied] = useState(false);
+
   const handleExport = () => {
       if (!isPaid) {
           setShowPayment(true);
       } else {
-          alert("Taklifnoma linki: taklifnoma.asia/" + (content.groomName + '-' + content.brideName).toLowerCase());
+          const finalSlug = generateSlug(content.groomName, content.brideName, content.date);
+          const url = `https://taklifnoma.asia/${finalSlug}`;
+          navigator.clipboard.writeText(url);
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2000);
       }
   };
 
@@ -338,8 +344,8 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
             onClick={handleExport}
             className="group w-full py-5 bg-[#E11D48] text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(225,29,72,0.3)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
           >
-            {isPaid ? <Share2 size={20} /> : <ExternalLink size={20} />}
-            {isPaid ? 'HAVOLANI OLISH' : 'TO\'LOV VA EKSPORT'}
+            {isPaid ? (isCopied ? <CheckCircle size={20} /> : <Share2 size={20} />) : <ExternalLink size={20} />}
+            {isPaid ? (isCopied ? 'HAVOLA NUSXALANDI!' : 'HAVOLANI OLISH') : 'TO\'LOV VA EKSPORT'}
           </button>
         </div>
       </div>
