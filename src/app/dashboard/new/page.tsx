@@ -45,20 +45,24 @@ export default function NewInvitationPage() {
     localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
     // 2. Sync with Supabase (AWAIT IT)
-    try {
-        const { error } = await supabase.from('invitations').insert({
-            id: newId,
-            slug: newInvitation.slug,
-            is_paid: false,
-            content: newInvitation.content
-        });
-        
-        if (error) {
-            console.error('Supabase error:', error.message);
-            // Even if it fails, we still proceed to editor because we have LocalStorage fallback
+    const hasRealDb = process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+    
+    if (hasRealDb) {
+        try {
+            const { error } = await supabase.from('invitations').insert({
+                id: newId,
+                slug: newInvitation.slug,
+                is_paid: false,
+                content: newInvitation.content
+            });
+            
+            if (error) {
+                console.error('Supabase initial sync error:', error.message);
+                // Even if it fails, we still proceed to editor because we have LocalStorage fallback
+            }
+        } catch (e) {
+            console.error('Initial Supabase sync failed:', e);
         }
-    } catch (e) {
-        console.error('Initial Supabase sync failed:', e);
     }
 
     // 3. Navigate to editor

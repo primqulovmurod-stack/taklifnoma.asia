@@ -152,20 +152,23 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
         localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
         // 2. Sync with Supabase (CRITICAL FOR ADMIN PANEL)
-        const { error } = await supabase
-            .from('invitations')
-            .upsert({
-                id: id,
-                slug: finalSlug,
-                content: content,
-                is_paid: isPaid
-            });
-            
-        if (error) {
-            console.error('DATABASE ERROR:', error.message);
-            alert('DIQQAT: Ma\'lumotlar bazaga saqlanmadi (Admin panelda ko\'rinmaydi). \n\nXatolik: ' + error.message);
-        } else {
-            // alert('Muvaffaqiyatli saqlandi! (Admin panelda ko\'rishingiz mumkin)');
+        // Only try to sync if we have a real Supabase URL (not the placeholder)
+        const hasRealDb = process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+        
+        if (hasRealDb) {
+            const { error } = await supabase
+                .from('invitations')
+                .upsert({
+                    id: id,
+                    slug: finalSlug,
+                    content: content,
+                    is_paid: isPaid
+                });
+                
+            if (error) {
+                console.error('DATABASE SYNC ERROR:', error.message);
+                // Silent error in production to not block user, but log it
+            }
         }
         
         // NEW: If not paid and it's a first save, automatically open payment modal
