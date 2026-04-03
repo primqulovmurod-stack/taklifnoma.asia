@@ -116,34 +116,11 @@ export default function AdminPanel() {
         <header className={`flex flex-col md:flex-row md:items-center justify-between gap-8 p-10 rounded-[3rem] shadow-xl border transition-all ${
             isDarkMode ? 'bg-[#141416] border-white/5' : 'bg-white border-[#FFE4E6]'
         }`}>
-           <div className="space-y-6">
+           <div className="space-y-4">
                 <div className="flex items-center gap-2 text-[#E11D48] font-black uppercase tracking-widest text-[10px]">
                     <ShieldCheck size={16} /> Taklifnoma Asia Admin
                 </div>
                 <h1 className={`font-serif text-4xl font-black transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Boshqaruv Paneli</h1>
-                
-                <div className="flex items-center gap-2 p-1.5 bg-gray-50 dark:bg-white/5 rounded-2xl w-fit border border-gray-100 dark:border-white/5">
-                    <button 
-                        onClick={() => setActiveTab('invites')}
-                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                            activeTab === 'invites' 
-                            ? 'bg-[#E11D48] text-white shadow-lg shadow-[#E11D48]/20' 
-                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
-                        }`}
-                    >
-                        Buyurtmalar
-                    </button>
-                    <button 
-                        onClick={() => setActiveTab('leads')}
-                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                            activeTab === 'leads' 
-                            ? 'bg-[#E11D48] text-white shadow-lg shadow-[#E11D48]/20' 
-                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
-                        }`}
-                    >
-                        Mijozlar (Leads)
-                    </button>
-                 </div>
            </div>
 
            <div className="relative">
@@ -164,12 +141,12 @@ export default function AdminPanel() {
             isDarkMode ? 'bg-[#141416] border-white/5' : 'bg-white border-[#FFE4E6]'
         }`}>
             <div className="overflow-x-auto">
-                {activeTab === 'invites' ? (
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className={`${isDarkMode ? 'bg-white/5' : 'bg-gray-50/50'} border-b border-gray-50/5 dark:border-white/5`}>
                             <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">ID / Havola</th>
                             <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Shaxs</th>
+                            <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Telefon</th>
                             <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Holat</th>
                             <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Sana</th>
                             <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Amallar</th>
@@ -177,9 +154,9 @@ export default function AdminPanel() {
                     </thead>
                     <tbody className="divide-y divide-gray-50/5 dark:divide-white/5">
                         {loading ? (
-                            <tr><td colSpan={5} className="p-20 text-center text-gray-400 font-bold animate-pulse">Yuklanmoqda...</td></tr>
+                            <tr><td colSpan={6} className="p-20 text-center text-gray-400 font-bold animate-pulse">Yuklanmoqda...</td></tr>
                         ) : filtered.length === 0 ? (
-                            <tr><td colSpan={5} className="p-20 text-center text-gray-400 font-bold">Hech narsa topilmadi.</td></tr>
+                            <tr><td colSpan={6} className="p-20 text-center text-gray-400 font-bold">Hech narsa topilmadi.</td></tr>
                         ) : filtered.map((inv) => (
                             <tr key={inv.id} className={`${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-gray-50/30'} transition-colors`}>
                                 <td className="px-8 py-6">
@@ -206,6 +183,16 @@ export default function AdminPanel() {
                                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{inv.content?.theme}</p>
                                         </div>
                                     </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                     <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
+                                            <Phone size={14} />
+                                        </div>
+                                        <span className={`text-xs font-black transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {inv.phone || inv.content?.phone || 'Mavjud emas'}
+                                        </span>
+                                     </div>
                                 </td>
                                 <td className="px-8 py-6">
                                     <button 
@@ -247,49 +234,6 @@ export default function AdminPanel() {
                         ))}
                     </tbody>
                 </table>
-                ) : (
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className={`${isDarkMode ? 'bg-white/5' : 'bg-gray-50/50'} border-b border-gray-50/5 dark:border-white/5`}>
-                            <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Telefon Raqami</th>
-                            <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Sana / Vaqt</th>
-                            <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Amalllar</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50/5 dark:divide-white/5">
-                        {loading ? (
-                            <tr><td colSpan={3} className="p-20 text-center text-gray-400 font-bold animate-pulse">Yuklanmoqda...</td></tr>
-                        ) : leads.length === 0 ? (
-                            <tr><td colSpan={3} className="p-20 text-center text-gray-400 font-bold">Mijozlar hali yo'q.</td></tr>
-                        ) : leads.map((lead) => (
-                            <tr key={lead.id} className={`${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-gray-50/30'} transition-colors`}>
-                                <td className="px-8 py-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
-                                            <Phone size={18} />
-                                        </div>
-                                        <p className={`text-sm font-black transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{lead.phone}</p>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                     <div className="flex items-center gap-2 text-xs text-gray-400 font-bold">
-                                         <ClockIcon size={14} />
-                                         {new Date(lead.created_at).toLocaleString('uz-UZ')}
-                                     </div>
-                                </td>
-                                <td className="px-8 py-6 text-right">
-                                    <a 
-                                        href={`tel:${lead.phone}`}
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-green-500/20"
-                                    >
-                                        Qo'ng'iroq qilish
-                                    </a>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                )}
             </div>
         </div>
       </div>
