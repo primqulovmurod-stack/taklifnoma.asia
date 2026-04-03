@@ -8,21 +8,21 @@ import { Details } from './Details';
 import { RSVP } from './RSVP';
 import { NavBar } from './NavBar';
 
-export default function StitchInvitation() {
+export default function StitchInvitation(content: any) {
   const [activeTab, setActiveTab] = useState('home');
 
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
-        return <Home key="home" />;
+        return <Home key="home" {...content} />;
       case 'story':
-        return <Story key="story" />;
+        return <Story key="story" {...content} />;
       case 'details':
-        return <Details key="details" />;
+        return <Details key="details" {...content} />;
       case 'rsvp':
-        return <RSVP key="rsvp" />;
+        return <RSVP key="rsvp" {...content} />;
       default:
-        return <Home key="home" />;
+        return <Home key="home" {...content} />;
     }
   };
 

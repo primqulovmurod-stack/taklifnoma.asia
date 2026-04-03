@@ -7,13 +7,14 @@ import { motion } from 'framer-motion';
 import { LayoutDashboard, Sparkles, Star, Heart, CheckCircle, ArrowRight, Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { templates } from '@/components/dashboard/TemplatePreview';
+import { supabase } from '@/lib/supabase';
 
 export default function NewInvitationPage() {
   const router = useRouter();
 
-  const handleSelectTemplate = (id: string) => {
-    // Generate a unique ID and new invitation entry in localStorage
-    const newId = Math.random().toString(36).substring(2, 9);
+    const handleSelectTemplate = async (templateId: string) => {
+    // Generate a unique ID (all caps for consistency with admin screenshot)
+    const newId = Math.random().toString(36).substring(2, 9).toUpperCase();
     const newInvitation = {
         id: newId,
         slug: `taklifnoma-${newId}`,
@@ -28,12 +29,13 @@ export default function NewInvitationPage() {
             locationUrl: '',
             imageUrl: 'https://images.pexels.com/photos/30206324/pexels-photo-30206324.jpeg',
             musicUrl: '/assets/die_with_a_smile.mp3',
-            theme: id,
+            theme: templateId,
             cardNumber: '8600 **** **** ****',
             cardName: 'ISM FAMILIYA'
         }
     };
 
+    // 1. Save to LocalStorage
     const localData = localStorage.getItem('taklifnoma_invitations');
     let invites = [];
     if (localData) {
@@ -42,7 +44,24 @@ export default function NewInvitationPage() {
     invites.push(newInvitation);
     localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
-    // Navigate to editor with selected template
+    // 2. Sync with Supabase (AWAIT IT)
+    try {
+        const { error } = await supabase.from('invitations').insert({
+            id: newId,
+            slug: newInvitation.slug,
+            is_paid: false,
+            content: newInvitation.content
+        });
+        
+        if (error) {
+            console.error('Supabase error:', error.message);
+            // Even if it fails, we still proceed to editor because we have LocalStorage fallback
+        }
+    } catch (e) {
+        console.error('Initial Supabase sync failed:', e);
+    }
+
+    // 3. Navigate to editor
     router.push(`/dashboard/edit/${newId}`);
   };
 

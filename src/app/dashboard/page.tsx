@@ -97,7 +97,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-6 md:p-12 space-y-12">
+    <div className="p-6 md:p-12 pb-24 space-y-12">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
             <h1 className="font-playfair text-4xl font-black text-gray-900 tracking-tight">Mening Taklifnomalarim</h1>
@@ -145,7 +145,7 @@ export default function DashboardPage() {
                                   ? 'bg-green-50 text-green-600 border-green-100' 
                                   : 'bg-orange-50 text-orange-600 border-orange-100'
                               }`}>
-                                  {invite.is_paid ? 'Faol' : 'To\'lanmagan'}
+                                  {invite.is_paid ? 'Faol ✅' : 'Chernovik'}
                               </div>
                           </div>
                       </div>
@@ -157,7 +157,7 @@ export default function DashboardPage() {
                                   <span>{invite.content.date} • {invite.content.time}</span>
                               </div>
                               <div className="text-[10px] font-black text-[#E11D48] tracking-widest uppercase">
-                                  Link: <span className="text-gray-400 font-medium lowercase">taklifnoma.asia/{invite.slug}</span>
+                                  Taklifnoma Linki: <span className="text-gray-400 font-medium lowercase">taklifnoma.asia/{invite.slug}</span>
                               </div>
                           </div>
 

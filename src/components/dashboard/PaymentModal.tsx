@@ -1,15 +1,15 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CreditCard, Lock, CheckCircle, ShieldCheck, X, ArrowRight, Heart, Copy, Send, Clock } from 'lucide-react';
+import { CreditCard, Lock, CheckCircle, ShieldCheck, X, ArrowRight, Heart, Copy, Send, Clock, Share2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   price?: string;
-  invitationId?: string;
+  invitationId?: string; // This is the ID (e.g. 361twks)
+  slug?: string;        // This is the slug (e.g. betxover-kelin-20-05)
   isPaid?: boolean;
 }
 
@@ -18,17 +18,51 @@ export default function PaymentModal({
   onClose, 
   onSuccess, 
   price = "190 000", 
-  invitationId = "YANGI",
-  isPaid = false 
+  invitationId,
+  slug,
+  isPaid: initialPaid = false 
 }: PaymentModalProps) {
   const [step, setStep] = useState<'details' | 'processing' | 'success'>('details');
   const [copied, setCopied] = useState(false);
+  const [isPaid, setIsPaid] = useState(initialPaid);
   const [formData, setFormData] = useState({
     cardNumber: '',
     expiry: '',
     cvc: '',
     name: ''
   });
+
+  // Polling for status update
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    const checkStatus = async () => {
+      if (isOpen && !isPaid && invitationId) {
+        const { data, error } = await supabase
+          .from('invitations')
+          .select('is_paid')
+          .eq('id', invitationId)
+          .single();
+        
+        if (data && !error && data.is_paid) {
+          setIsPaid(true);
+          onSuccess(); // Notify parent
+        }
+      }
+    };
+
+    if (isOpen && !isPaid) {
+      checkStatus();
+      interval = setInterval(checkStatus, 5000); // Check every 5 seconds
+    }
+
+    return () => clearInterval(interval);
+  }, [isOpen, isPaid, invitationId, onSuccess]);
+
+  // Sync initialPaid prop
+  useEffect(() => {
+    setIsPaid(initialPaid);
+  }, [initialPaid]);
 
   const handlePay = () => {
     if (!formData.cardNumber) return;
@@ -40,10 +74,17 @@ export default function PaymentModal({
 
   const handleCopy = () => {
     if (!isPaid) return;
-    const url = `https://taklifnoma.asia/${invitationId}`;
+    const url = `https://taklifnoma.asia/${slug || invitationId}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = () => {
+    if (!isPaid) return;
+    const url = `https://taklifnoma.asia/${slug || invitationId}`;
+    const text = "Sizni nikoh oqshomimizga lutfan taklif etamiz:";
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
   };
 
   const handleFinish = () => {
@@ -95,100 +136,129 @@ export default function PaymentModal({
 
                     <div className="p-6 bg-gray-50 rounded-[2rem] border border-dashed border-gray-200 text-center space-y-4">
                         <div>
-                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Taklifnoma ID raqamingiz</p>
-                            <p className="text-sm font-black text-[#E11D48] tracking-tighter uppercase">{invitationId}</p>
+                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Taklifnoma ID va Statust</p>
+                            <div className="flex items-center justify-center gap-2">
+                                <p className="text-sm font-black text-[#E11D48] tracking-tighter uppercase">{slug || invitationId}</p>
+                                <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase ${isPaid ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600 animate-pulse'}`}>
+                                    {isPaid ? 'FAOL ✅' : 'KUTILMOQDA ⏳'}
+                                </span>
+                            </div>
                         </div>
                         
-                        <button 
-                            onClick={handleCopy}
-                            disabled={!isPaid}
-                            className={`w-full flex items-center justify-center gap-3 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border ${
-                                isPaid 
-                                ? 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 active:scale-95' 
-                                : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60'
-                            }`}
-                        >
-                            {isPaid ? (
-                                <>
-                                    {copied ? <CheckCircle size={14} /> : <Copy size={14} />}
-                                    {copied ? 'NUshALANDI!' : 'HAVOLANI NUShALASh'}
-                                </>
-                            ) : (
-                                <>
-                                    <Clock size={14} />
-                                    FAOLLAShTIRILGACH NUShALASh MUMKIN
-                                </>
+                        <div className="flex flex-col gap-2">
+                            <button 
+                                onClick={handleCopy}
+                                disabled={!isPaid}
+                                className={`w-full flex items-center justify-center gap-3 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border ${
+                                    isPaid 
+                                    ? 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 active:scale-95' 
+                                    : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60'
+                                }`}
+                            >
+                                {isPaid ? (
+                                    <>
+                                        {copied ? <CheckCircle size={14} /> : <Copy size={14} />}
+                                        {copied ? 'NUSXALANDI!' : 'HAVOLANI NUSXALASH'}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Clock size={14} />
+                                        Tasdiqlangach nusxalash mumkin
+                                    </>
+                                )}
+                            </button>
+
+                            {isPaid && (
+                                <button 
+                                    onClick={handleShare}
+                                    className="w-full flex items-center justify-center gap-3 py-4 bg-[#229ED9] text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-[#229ED9]/20 hover:brightness-110 active:scale-95"
+                                >
+                                    <Send size={14} />
+                                    Havolani yuborish (Telegram)
+                                </button>
                             )}
-                        </button>
-                    </div>
-
-                    {/* Card Details Path - RESTORED */}
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">Karta raqami (UZCARD / HUMO)</label>
-                            <div className="relative">
-                                <CreditCard className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                                <input 
-                                    placeholder="8600 **** **** ****"
-                                    className="w-full pl-16 pr-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black tracking-widest"
-                                    value={formData.cardNumber}
-                                    onChange={(e) => {
-                                        const v = e.target.value.replace(/\D/g, '');
-                                        const chunks = v.match(/.{1,4}/g);
-                                        setFormData({...formData, cardNumber: chunks ? chunks.join(' ') : v});
-                                    }}
-                                    maxLength={19}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">Muddati</label>
-                                <input 
-                                    placeholder="MM/YY"
-                                    className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black text-center tracking-widest"
-                                    value={formData.expiry}
-                                    onChange={(e) => setFormData({...formData, expiry: e.target.value})}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">CVC/CVV</label>
-                                <input 
-                                    placeholder="***"
-                                    className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black text-center tracking-widest"
-                                    value={formData.cvc}
-                                    onChange={(e) => setFormData({...formData, cvc: e.target.value})}
-                                />
-                            </div>
                         </div>
                     </div>
 
-                    <footer className="space-y-4 pt-4">
-                        <button 
-                            disabled={!formData.cardNumber}
-                            onClick={handlePay}
-                            className="w-full flex items-center justify-center gap-4 py-6 rounded-[2rem] bg-[#E11D48] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#E11D48]/30 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale"
-                        >
-                            <Lock size={18} />
-                            <span>KARTA ORQALI TASDIQLASH</span>
-                        </button>
+                    {!isPaid && (
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">Karta raqami (UZCARD / HUMO)</label>
+                                <div className="relative">
+                                    <CreditCard className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
+                                    <input 
+                                        placeholder="8600 **** **** ****"
+                                        className="w-full pl-16 pr-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black tracking-widest"
+                                        value={formData.cardNumber}
+                                        onChange={(e) => {
+                                            const v = e.target.value.replace(/\D/g, '');
+                                            const chunks = v.match(/.{1,4}/g);
+                                            setFormData({...formData, cardNumber: chunks ? chunks.join(' ') : v});
+                                        }}
+                                        maxLength={19}
+                                    />
+                                </div>
+                            </div>
 
-                        <a 
-                            href={`https://t.me/taklifnoma_asia?text=Assalomu alaykum, to'lov qildim. ID: ${invitationId}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full flex items-center justify-center gap-4 py-3 rounded-2xl bg-[#229ED9]/5 text-[#229ED9] font-black text-[10px] uppercase tracking-widest hover:bg-[#229ED9]/10 transition-all group"
-                        >
-                            <Send size={14} className="group-hover:rotate-12 transition-transform" />
-                            <span>Telegram orqali to'lov</span>
-                        </a>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">Muddati</label>
+                                    <input 
+                                        placeholder="MM/YY"
+                                        className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black text-center tracking-widest"
+                                        value={formData.expiry}
+                                        onChange={(e) => setFormData({...formData, expiry: e.target.value})}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-4 tracking-widest leading-none">CVC/CVV</label>
+                                    <input 
+                                        placeholder="***"
+                                        className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#E11D48]/5 focus:border-[#E11D48]/30 outline-none transition-all text-sm font-black text-center tracking-widest"
+                                        value={formData.cvc}
+                                        onChange={(e) => setFormData({...formData, cvc: e.target.value})}
+                                    />
+                                </div>
+                            </div>
 
-                        <p className="pt-2 text-center flex items-center justify-center gap-2 text-[10px] font-bold text-gray-300 uppercase tracking-widest">
-                            <ShieldCheck size={14} className="text-green-400" />
-                            Bank xavfsizligi • 3D Secure
-                        </p>
-                    </footer>
+                            <footer className="space-y-4 pt-4">
+                                <button 
+                                    disabled={!formData.cardNumber}
+                                    onClick={handlePay}
+                                    className="w-full flex items-center justify-center gap-4 py-6 rounded-[2rem] bg-[#E11D48] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#E11D48]/30 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale"
+                                >
+                                    <Lock size={18} />
+                                    <span>KARTA ORQALI TO'LOV</span>
+                                </button>
+
+                                <a 
+                                    href={`https://t.me/Taklifnoma_Asia?text=Assalomu alaykum, to'lov qildim. ID: ${slug || invitationId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full flex items-center justify-center gap-4 py-3 rounded-2xl bg-[#229ED9]/5 text-[#229ED9] font-black text-[10px] uppercase tracking-widest hover:bg-[#229ED9]/10 transition-all group"
+                                >
+                                    <Send size={14} className="group-hover:rotate-12 transition-transform" />
+                                    <span>Telegram orqali chek yuborish</span>
+                                </a>
+
+                                <p className="pt-2 text-center flex items-center justify-center gap-2 text-[10px] font-bold text-gray-300 uppercase tracking-widest">
+                                    <ShieldCheck size={14} className="text-green-400" />
+                                    Bank xavfsizligi • 3D Secure
+                                </p>
+                            </footer>
+                        </div>
+                    )}
+
+                    {isPaid && (
+                         <footer className="pt-4">
+                            <button 
+                                onClick={onClose}
+                                className="w-full py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors"
+                            >
+                                Yopish
+                            </button>
+                         </footer>
+                    )}
                 </div>
             )}
 
@@ -220,16 +290,24 @@ export default function PaymentModal({
                     <div className="space-y-6 relative z-10 text-center flex flex-col items-center">
                         <div className="space-y-2">
                             <h3 className="font-playfair text-3xl font-black text-gray-900 leading-tight">Yuborildi!</h3>
-                            <p className="text-gray-400 text-md font-medium px-4">Buyurtmangiz qabul qilindi. Faollashtirish uchun Telegram'dan skrinshot yuboring.</p>
+                            <p className="text-gray-400 text-md font-medium px-4">Xabar yuborildi. Faollashtirish uchun Telegram'dan skrinshot yuboring.</p>
                         </div>
                         
-                        <div className="pt-8 w-full">
+                        <div className="pt-8 w-full space-y-4">
+                            <a 
+                                href={`https://t.me/Taklifnoma_Asia?text=Assalomu alaykum, to'lov qildim. ID: ${slug || invitationId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full flex items-center justify-center gap-4 py-6 rounded-2xl bg-[#229ED9] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#229ED9]/30 hover:brightness-110 active:scale-95 transition-all"
+                            >
+                                <Send size={20} />
+                                <span>TELEGRAMGA OTISH</span>
+                            </a>
                             <button 
                                 onClick={handleFinish}
-                                className="w-full flex items-center justify-center gap-4 py-5 rounded-2xl bg-[#1D1D1D] text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-black/10 group"
+                                className="w-full py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors"
                             >
-                                <span>KABINETGA QAYTISH</span>
-                                <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                                KABINETGA QAYTISH
                             </button>
                         </div>
                     </div>

@@ -138,7 +138,7 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
     // Generate slug from names and date
     const finalSlug = generateSlug(content.groomName, content.brideName, content.date);
     
-    // 1. Always save to LocalStorage FIRST (Guarantees it works without DB)
+    // 1. Always save to LocalStorage FIRST
     try {
         const localData = localStorage.getItem('taklifnoma_invitations');
         let invites = localData ? JSON.parse(localData) : [];
@@ -151,30 +151,32 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
         }
         localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
-        // 2. Try to sync with Supabase in the background (Silently)
-        try {
-            const { error } = await supabase
-                .from('invitations')
-                .upsert({
-                    id: id,
-                    slug: finalSlug,
-                    content: content,
-                    is_paid: isPaid
-                });
-            if (error) console.warn('Supabase sync warning:', error.message);
-        } catch (e) {
-            // Ignore database network errors so saving locally still succeeds
+        // 2. Sync with Supabase (CRITICAL FOR ADMIN PANEL)
+        const { error } = await supabase
+            .from('invitations')
+            .upsert({
+                id: id,
+                slug: finalSlug,
+                content: content,
+                is_paid: isPaid,
+                updated_at: new Date().toISOString()
+            });
+            
+        if (error) {
+            console.error('DATABASE ERROR:', error.message);
+            alert('DIQQAT: Ma\'lumotlar bazaga saqlanmadi (Admin panelda ko\'rinmaydi). \n\nXatolik: ' + error.message);
+        } else {
+            // alert('Muvaffaqiyatli saqlandi! (Admin panelda ko\'rishingiz mumkin)');
         }
         
-        // NEW: If not paid, automatically open payment modal after save
+        // NEW: If not paid and it's a first save, automatically open payment modal
         if (!isPaid) {
             setShowPayment(true);
         }
             
-    } catch (err) {
-        console.error('Save error:', err);
-        // We only show alert if a real fatal error happens
-        alert('Saqlashda tizimli xatolik yuz berdi. Iltimos qaytadan urinib ko\'ring.');
+    } catch (err: any) {
+        console.error('FATAL SAVE ERROR:', err);
+        alert('Saqlashda xatolik: ' + (err.message || 'Tarmoq xatosi'));
     } finally {
         setIsSaving(false);
     }
@@ -436,7 +438,8 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
         onClose={() => setShowPayment(false)} 
         onSuccess={() => setIsPaid(true)} 
         isPaid={isPaid}
-        invitationId={generateSlug(content.groomName, content.brideName, content.date)}
+        invitationId={id}
+        slug={generateSlug(content.groomName, content.brideName, content.date)}
       />
     </div>
   );

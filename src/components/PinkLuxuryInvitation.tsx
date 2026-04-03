@@ -86,11 +86,11 @@ export default function PinkLuxuryInvitation({
           </p>
 
           <div className="mt-6 md:mt-8 pt-6 md:pt-8 w-full max-w-sm flex flex-col items-center gap-3 md:gap-4">
-            <a href="https://taklifnoma.ai" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-purple-600 hover:text-[#6B21A8] transition-colors bg-purple-100 px-6 py-2 rounded-full border border-purple-200">
-              taklifnoma.ai orqali yaratildi
-            </a>
-            <a href="tel:+998915930833" className="text-[11px] font-bold text-[#64748B] hover:text-[#0F172A] uppercase tracking-widest transition-colors mt-2">
-              taklifnoma buyurtma qilish: +998 91 593 08 33
+            <p className="text-[10px] md:text-sm font-bold text-[#64748B] uppercase tracking-widest italic">
+              Taklifnoma Asia orqali yaratildi
+            </p>
+            <a href="https://taklifnoma.asia" target="_blank" rel="noopener noreferrer" className="text-sm font-black text-white bg-purple-600 hover:bg-purple-700 transition-all px-8 py-4 rounded-2xl shadow-xl shadow-purple-200 uppercase tracking-widest">
+              Taklifnoma Yaratish
             </a>
           </div>
         </footer>

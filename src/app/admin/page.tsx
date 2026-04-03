@@ -35,29 +35,32 @@ export default function AdminPanel() {
   };
 
   const toggleStatus = async (id: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
+    
+    // 1. Update State immediately
+    setInvitations(prev => prev.map(inv => 
+        inv.id === id ? { ...inv, is_paid: newStatus } : inv
+    ));
+
     try {
-        // Silently try updating Supabase
-        try {
-            const { error } = await supabase
+        // 2. Update Supabase
+        const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+        if (!isPlaceholder) {
+            await supabase
                 .from('invitations')
-                .update({ is_paid: !currentStatus })
+                .update({ is_paid: newStatus })
                 .eq('id', id);
-            if (error) console.warn('Supabase error:', error.message);
-        } catch (e) {
-            // Ignore offline network error
         }
         
-        // Refresh local state immediately
-        setInvitations(prev => prev.map(inv => 
-            inv.id === id ? { ...inv, is_paid: !currentStatus } : inv
-        ));
-        
-        // Final fallback to localStorage sync
-        const updatedLocal = invitations.map(inv => 
-             inv.id === id ? { ...inv, is_paid: !currentStatus } : inv
-        );
-        localStorage.setItem('taklifnoma_invitations', JSON.stringify(updatedLocal));
-        
+        // 3. Sync with LocalStorage
+        const localData = localStorage.getItem('taklifnoma_invitations');
+        if (localData) {
+            const parsed = JSON.parse(localData);
+            const updated = parsed.map((inv: any) => 
+                inv.id === id ? { ...inv, is_paid: newStatus } : inv
+            );
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(updated));
+        }
     } catch (err) {
         console.error('Update error:', err);
     }
@@ -66,23 +69,22 @@ export default function AdminPanel() {
   const deleteInvite = async (id: string) => {
     if (confirm('Ushbu taklifnomani bazadan butunlay o\'chirmoqchimisiz?')) {
         try {
-            try {
-                const { error } = await supabase
-                    .from('invitations')
-                    .delete()
-                    .eq('id', id);
-                if (error) console.warn('Supabase delete error:', error.message);
-            } catch(e) {
-                // Ignore offline network error
+            // Update State
+            setInvitations(prev => prev.filter(inv => inv.id !== id));
+
+            // Update Supabase
+            const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+            if (!isPlaceholder) {
+                await supabase.from('invitations').delete().eq('id', id);
             }
             
-            // Refresh local state
-            setInvitations(prev => prev.filter(inv => inv.id !== id));
-            
-            // Local fallback
-            const remainingLocal = invitations.filter(inv => inv.id !== id);
-            localStorage.setItem('taklifnoma_invitations', JSON.stringify(remainingLocal));
-            
+            // Sync with LocalStorage
+            const localData = localStorage.getItem('taklifnoma_invitations');
+            if (localData) {
+                const parsed = JSON.parse(localData);
+                const updated = parsed.filter((inv: any) => inv.id !== id);
+                localStorage.setItem('taklifnoma_invitations', JSON.stringify(updated));
+            }
         } catch (err) {
             console.error('Delete error:', err);
         }
@@ -92,18 +94,19 @@ export default function AdminPanel() {
   const filtered = invitations.filter(inv => 
     inv.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     inv.content?.groomName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    inv.content?.brideName?.toLowerCase().includes(searchTerm.toLowerCase())
+    inv.content?.brideName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    inv.slug?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-[#FFF9FA] p-6 md:p-12">
+    <div className="min-h-screen bg-[#FFF9FA] p-6 md:p-12 font-sans selection:bg-[#E11D48]/10">
       <div className="max-w-7xl mx-auto space-y-12">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white p-10 rounded-[3rem] shadow-xl border border-[#FFE4E6]">
            <div className="space-y-2">
                 <div className="flex items-center gap-2 text-[#E11D48] font-black uppercase tracking-widest text-[10px]">
-                    <ShieldCheck size={16} /> Admin Panel
+                    <ShieldCheck size={16} /> Taklifnoma Asia Admin
                 </div>
-                <h1 className="font-playfair text-4xl font-black text-gray-900 leading-tight">Taklifnomalarni Boshqarish</h1>
+                <h1 className="font-serif text-4xl font-black text-gray-900 leading-tight">Boshqaruv Paneli</h1>
                 <p className="text-gray-400 text-sm font-medium">Barcha buyurtmalar va to'lovlarni nazorat qilish</p>
            </div>
 
@@ -139,11 +142,15 @@ export default function AdminPanel() {
                         ) : filtered.map((inv) => (
                             <tr key={inv.id} className="hover:bg-gray-50/30 transition-colors">
                                 <td className="px-8 py-6">
-                                    <div className="space-y-1">
+                                    <div className="space-y-1 group">
                                         <p className="font-mono text-[10px] font-bold text-gray-400 uppercase tracking-tighter">#{inv.id}</p>
-                                        <p className="text-sm font-black text-[#E11D48] flex items-center gap-2">
-                                            {inv.slug} <button className="p-1 hover:bg-red-50 rounded-lg"><ExternalLink size={12} /></button>
-                                        </p>
+                                        <a 
+                                            href={`/${inv.slug}`} 
+                                            target="_blank" 
+                                            className="text-sm font-black text-[#E11D48] flex items-center gap-2 hover:underline decoration-2 underline-offset-4 group-hover:scale-105 transition-transform origin-left"
+                                        >
+                                            {inv.slug} <ExternalLink size={12} className="opacity-50" />
+                                        </a>
                                     </div>
                                 </td>
                                 <td className="px-8 py-6">

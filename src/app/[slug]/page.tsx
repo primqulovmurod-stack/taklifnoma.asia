@@ -63,20 +63,20 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
             </div>
             
             <div className="space-y-4">
-                <h1 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">Faollashtirish kutilmoqda</h1>
+                <h1 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic">Taklifnoma Asia</h1>
                 <p className="text-gray-400 font-medium leading-relaxed">
-                   Ushbu taklifnoma hozircha admin tomonidan faollashtirilmagan. To'lov tasdiqlangandan so'ng 10 daqiqa ichida ishga tushadi.
+                   Ushbu taklifnoma hozircha faollashtirilmagan. To'lov tasdiqlangandan so'ng 10 daqiqa ichida ishga tushadi.
                 </p>
             </div>
 
             <div className="pt-6 border-t border-gray-50 space-y-4">
-                <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Agar siz taklifnoma egasi bo'lsangiz:</p>
+                <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">To'lovni tasdiqlash uchun:</p>
                 <a 
-                  href="https://t.me/taklifnoma_asia" 
+                  href="https://t.me/Taklifnoma_Asia" 
                   target="_blank"
                   className="flex items-center justify-center gap-3 w-full py-5 bg-[#E11D48] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-[#E11D48]/20 hover:scale-105 transition-all"
                 >
-                  <Send size={16} /> Admin bilan bog'lanish
+                  <Send size={16} /> Telegram orqali to'lov
                 </a>
             </div>
         </div>
