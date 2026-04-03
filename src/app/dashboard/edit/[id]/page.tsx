@@ -113,9 +113,17 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
             audio.play().catch(e => console.log('Autoplay blocked'));
         }
 
-    } catch (err) {
-        console.error('Yuklashda xatolik:', err);
-        alert("Musiqani yuklashda xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.");
+    } catch (err: any) {
+        console.error('UPLOAD ERROR DETAILS:', err);
+        let errorMsg = "Musiqani yuklashda xatolik yuz berdi.";
+        
+        if (err?.message?.includes('bucket')) {
+            errorMsg = "Xatolik: Supabase Storage'da 'invitations' papkasi topilmadi. Iltimos, Supabase Dashboard'da yangi 'invitations' papkasini (Public) yarating.";
+        } else if (err?.message?.includes('policy')) {
+            errorMsg = "Xatolik: Fayl yuklash ruxsati yo'q. Storage Policies (RLS) qoidalarini tekshiring.";
+        }
+        
+        alert(errorMsg + "\n\nAsl xatolik: " + (err?.message || "Noma'lum xato"));
     } finally {
         setIsUploading(false);
     }
