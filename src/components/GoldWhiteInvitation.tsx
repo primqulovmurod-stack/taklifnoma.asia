@@ -152,7 +152,7 @@ export default function GoldWhiteInvitation({
 
           {/* Card */}
           <section className="py-32 px-10 text-center space-y-16 bg-white">
-             <h3 className={`text-4xl font-serif italic ${goldText}`}>To'yona uchun</h3>
+             <h3 className={`text-4xl font-serif italic ${goldText}`}>To'yona uchun (Test)</h3>
              <div className="p-8 bg-black rounded-[3rem] shadow-2xl space-y-12 text-left relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 text-white/5 font-serif italic text-4xl">HUMO</div>
                 <div className="space-y-8 relative z-10">
