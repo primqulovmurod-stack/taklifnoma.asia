@@ -16,6 +16,7 @@ interface PinkWhiteInvitationProps {
   musicUrl?: string;
   cardNumber?: string;
   cardName?: string;
+  isPreview?: boolean;
 }
 
 const pinkText = "bg-clip-text text-transparent bg-gradient-to-b from-[#AD1457] via-[#D81B60] to-[#AD1457]";
@@ -32,7 +33,8 @@ export default function PinkWhiteInvitation({
   imageUrl = "https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg",
   musicUrl = "/assets/die_with_a_smile.mp3",
   cardNumber = "9860 1234 5678 1234",
-  cardName = "MUROD P."
+  cardName = "MUROD P.",
+  isPreview = false
 }: PinkWhiteInvitationProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);

@@ -8,9 +8,10 @@ import { CreditCard, MapPin, Heart, Volume2, VolumeX } from 'lucide-react';
 
 interface ElegantInvitationProps {
   content: InvitationContent;
+  isPreview?: boolean;
 }
 
-export const ElegantInvitation: React.FC<ElegantInvitationProps> = ({ content }) => {
+export const ElegantInvitation: React.FC<ElegantInvitationProps> = ({ content, isPreview }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCopied, setIsCopied] = useState(false);

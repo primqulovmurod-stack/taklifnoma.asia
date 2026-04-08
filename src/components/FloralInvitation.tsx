@@ -8,6 +8,7 @@ import { GiftSection } from '@/components/luxury/GiftSection';
 
 interface FloralInvitationProps {
   content: InvitationContent;
+  isPreview?: boolean;
 }
 
 export const FloralInvitation: React.FC<FloralInvitationProps> = ({ content }) => {

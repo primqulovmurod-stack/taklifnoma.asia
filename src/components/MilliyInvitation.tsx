@@ -17,6 +17,7 @@ interface MilliyInvitationProps {
   musicUrl?: string;
   cardNumber?: string;
   cardName?: string;
+  isPreview?: boolean;
 }
 
 export default function MilliyInvitation({
@@ -28,7 +29,8 @@ export default function MilliyInvitation({
   locationAddress = "Toshkent sh., Yunusobod t., 4-mavze, 12-uy",
   musicUrl = "/assets/die_with_a_smile.mp3",
   cardNumber = "9860 1234 5678 1234",
-  cardName = "MUROD P."
+  cardName = "MUROD P.",
+  isPreview = false
 }: MilliyInvitationProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);

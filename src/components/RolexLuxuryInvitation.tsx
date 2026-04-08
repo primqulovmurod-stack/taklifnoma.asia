@@ -15,6 +15,7 @@ interface RolexLuxuryInvitationProps {
   musicUrl?: string;
   cardNumber?: string;
   cardName?: string;
+  isPreview?: boolean;
 }
 
 export default function RolexLuxuryInvitation({
@@ -27,7 +28,8 @@ export default function RolexLuxuryInvitation({
   imageUrl = "https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg",
   musicUrl = "/assets/die_with_a_smile.mp3",
   cardNumber = "9860 1234 5678 1234",
-  cardName = "FALONCHI P."
+  cardName = "FALONCHI P.",
+  isPreview = false
 }: RolexLuxuryInvitationProps) {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);

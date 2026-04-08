@@ -17,6 +17,12 @@ import StitchInvitation from '@/components/StitchInvitation/Main';
 
 export const templates = [
   { 
+    id: 'pink-luxury', 
+    name: 'Pink Luxury Special', 
+    image: 'https://images.pexels.com/photos/1035665/pexels-photo-1035665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    style: 'Modern & Soft'
+  },
+  { 
     id: 'goldclassic', 
     name: 'Gold Classic Black', 
     image: 'https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg',
@@ -27,12 +33,6 @@ export const templates = [
     name: 'Gold Classic White', 
     image: 'https://images.pexels.com/photos/313707/pexels-photo-313707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     style: 'Gold & White'
-  },
-  { 
-    id: 'pink-luxury', 
-    name: 'Pink Luxury Special', 
-    image: 'https://images.pexels.com/photos/1035665/pexels-photo-1035665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    style: 'Modern & Soft'
   }
 ];
 
@@ -50,27 +50,27 @@ export default function TemplatePreview({ content, isPreview, isMuted }: Templat
     case 'gold-white':
       return <GoldWhiteInvitation {...content} isPreview />;
     case 'floral':
-      return <FloralInvitation {...({ content, isPreview } as any)} />;
+      return <FloralInvitation content={content} isPreview />;
     case 'goldclassic':
-        return <GoldClassicInvitation {...content} isPreview={isPreview} isMuted={isMuted} />;
+        return <GoldClassicInvitation {...content} isPreview isMuted={isMuted} />;
     case 'gold-classic-white':
-        return <GoldClassicWhiteInvitation {...content} isPreview={isPreview} isMuted={isMuted} />;
+        return <GoldClassicWhiteInvitation {...content} isPreview isMuted={isMuted} />;
     case 'rolex':
-        return <RolexLuxuryInvitation {...({ ...content, isPreview } as any)} />;
+        return <RolexLuxuryInvitation {...content} isPreview />;
     case 'milliy':
-        return <MilliyInvitation {...({ ...content, isPreview } as any)} />;
+        return <MilliyInvitation {...content} isPreview />;
     case 'pink-luxury':
-        return <PinkLuxuryInvitation {...content} isPreview={isPreview} isMuted={isMuted} />;
+        return <PinkLuxuryInvitation {...content} isPreview isMuted={isMuted} />;
     case 'watch-design':
-        return <WatchDesignInvitation {...({ ...content, isPreview } as any)} />;
+        return <WatchDesignInvitation {...content} isPreview />;
     case 'elegant':
-        return <ElegantInvitation {...({ content, isPreview } as any)} />;
+        return <ElegantInvitation content={content} isPreview />;
     case 'luxury-dark':
-        return <LuxuryDarkInvitation {...({ ...content, isPreview } as any)} />;
+        return <LuxuryDarkInvitation {...content} isPreview />;
     case 'pink-white':
-        return <PinkWhiteInvitation {...({ ...content, isPreview } as any)} />;
+        return <PinkWhiteInvitation {...content} isPreview />;
     case 'stitch':
-        return <StitchInvitation {...({ isPreview } as any)} />;
+        return <StitchInvitation isPreview />;
     default:
       return <GoldWhiteInvitation {...content} isPreview />;
   }

@@ -13,13 +13,13 @@ import { GiftSection } from '@/components/luxury/GiftSection';
 interface PinkLuxuryInvitationProps {
   groomName: string;
   brideName: string;
-  date: string;
-  time: string;
-  locationName: string;
+  date?: string;
+  time?: string;
+  locationName?: string;
   locationAddress?: string;
-  locationUrl: string;
-  imageUrl: string;
-  musicUrl: string;
+  locationUrl?: string;
+  imageUrl?: string;
+  musicUrl?: string;
   cardNumber?: string;
   cardName?: string;
   showGift?: boolean;
@@ -31,17 +31,17 @@ interface PinkLuxuryInvitationProps {
 export default function PinkLuxuryInvitation({
   groomName,
   brideName,
-  date,
-  time,
-  locationName,
-  locationAddress,
-  locationUrl,
-  imageUrl,
-  musicUrl,
-  cardNumber,
-  cardName,
+  date = "2026-04-24",
+  time = "19:00",
+  locationName = "Toshkent",
+  locationAddress = "",
+  locationUrl = "",
+  imageUrl = "",
+  musicUrl = "",
+  cardNumber = "",
+  cardName = "",
   showGift = false,
-  description,
+  description = "Sizni kutib qolamiz!",
   isPreview = false,
   isMuted = false
 }: PinkLuxuryInvitationProps) {
