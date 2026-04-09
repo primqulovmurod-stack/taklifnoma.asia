@@ -48,7 +48,7 @@ export default function AdminPanel() {
           } else if (payload.eventType === 'UPDATE') {
               setInvitations(prev => prev.map(inv => inv.id === payload.new.id ? payload.new : inv));
           } else if (payload.eventType === 'DELETE') {
-              setInvitations(prev => prev.filter(inv => inv.id === payload.old.id));
+              setInvitations(prev => prev.filter(inv => inv.id !== payload.old.id));
           }
       })
       .subscribe();
@@ -141,11 +141,18 @@ export default function AdminPanel() {
             const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
             
             if (!isPlaceholder) {
+                console.log('Attempting to delete invitation:', id);
                 const { error } = await supabase.from('invitations').delete().eq('id', id);
                 if (error) {
                     console.error('DELETE ERROR:', error);
-                    alert("O'chirib bo'lmadi: " + error.message);
+                    let msg = "O'chirib bo'lmadi: " + error.message;
+                    if (error.message?.includes('RLS') || error.code === '42501') {
+                        msg = "Xatolik: DELETE huquqi yo'q. Supabase'da 'invitations' jadvali uchun DELETE ruxsatini (public) bering.";
+                    }
+                    alert(msg);
                     setInvitations(original);
+                } else {
+                    console.log('Delete successful');
                 }
             } else {
                 const localData = localStorage.getItem('taklifnoma_invitations');
