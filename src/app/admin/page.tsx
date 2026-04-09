@@ -135,9 +135,8 @@ export default function AdminPanel() {
   };
 
   const deleteInvite = async (id: string) => {
-    if (confirm('Ushbu taklifnomani bazadan butunlay o\'chirmoqchimisiz?')) {
-        const original = [...invitations];
-        try {
+    const original = [...invitations];
+    try {
             setInvitations(prev => prev.filter(inv => inv.id !== id));
             
             const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
@@ -171,8 +170,7 @@ export default function AdminPanel() {
             console.error('Delete error:', err);
             setInvitations(original);
         }
-    }
-  };
+    };
 
   const filtered = invitations.filter(inv => 
     inv.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
