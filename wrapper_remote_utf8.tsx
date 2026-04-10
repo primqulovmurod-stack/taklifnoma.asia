@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import RolexLuxuryInvitation from '@/components/RolexLuxuryInvitation';
@@ -57,30 +57,38 @@ export default function InvitationWrapper({ initialHost }: InvitationWrapperProp
 
   if (!mounted) return null;
 
-  // FORCE FOR LOCAL COPY
-  const isLocal = typeof window !== 'undefined' && window.location.hostname.includes('localhost');
-  
+
+
   let content;
-  if (isLocal) {
-    content = (
-      <GoldWhiteInvitation 
-        groomName="Kenjabek"
-        brideName="Snejana"
-        date="24 - APREL - 2026"
-        time="19:00"
-        locationName="Demir (Asr)"
-        locationAddress="Jizzax Shahar"
-        locationUrl="https://www.google.com/maps/place/ASR+Wedding+Hall/@40.1490112,67.822955,20.25z/data=!4m6!3m5!1s0x38b2969244164953:0xcf441bf7b030ea16!8m2!3d40.1490952!4d67.8228464!16s%2Fg%2F11h9w32rg7!5m1!1e2?entry=ttu&g_ep=EgoyMDI2MDMyNC4wIKXMDSoASAFQAw%3D%3D"
-        imageUrl="https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg"
-        musicUrl="/assets/die_with_a_smile.mp3"
-        cardName="Kenjabek"
-      />
-    );
-  } else if (isXurshid) {
+  // Handle Xurshid's themes
+  if (isXurshid) {
     if (hostLower.includes('pink') || theme === 'pink') {
-      content = <PinkLuxuryInvitation groomName="Xurshidbek" brideName="Mohinur" />;
+      content = (
+        <PinkLuxuryInvitation 
+          groomName="Xurshidbek" 
+          brideName="Mohinur" 
+          date="20 Iyun 2026"
+          time="18:00"
+          locationName="Oqsaroy Koshonasi"
+          locationAddress="Surxondaryo viloyati, Sho'rchi tumani"
+          locationUrl="https://maps.google.com"
+          imageUrl="https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg"
+          musicUrl="/assets/die_with_a_smile.mp3"
+        />
+      );
     } else {
-      content = <RolexLuxuryInvitation groomName="Xurshidbek" brideName="Mohinur" />;
+      content = (
+        <RolexLuxuryInvitation 
+          groomName="Xurshidbek" 
+          brideName="Mohinur" 
+          date="20 Iyun 2026"
+          time="18:00"
+          locationName="Oqsaroy Koshonasi"
+          locationAddress="Surxondaryo viloyati, Sho'rchi tumani"
+          imageUrl="https://images.pexels.com/photos/30206324/pexels-photo-30206324/free-photo-of-elegant-gold-wedding-rings-on-marble-surface.jpeg"
+          musicUrl="/assets/die_with_a_smile.mp3"
+        />
+      );
     }
   } else if (theme === 'pink' || hostLower.includes('pink')) {
     content = (
@@ -96,7 +104,7 @@ export default function InvitationWrapper({ initialHost }: InvitationWrapperProp
         musicUrl="/assets/die_with_a_smile.mp3"
       />
     );
-  } else if (theme === 'rolex' || hostLower.includes('rolex')) {
+  } else if (theme === 'rolex' || hostLower.includes('rolex') || hostLower.includes('localhost')) {
     content = <RolexLuxuryInvitation groomName="Xurshidbek" brideName="Mohinur" />;
   } else if (theme === 'watch') {
     content = (
@@ -132,7 +140,7 @@ export default function InvitationWrapper({ initialHost }: InvitationWrapperProp
     content = (
       <GoldWhiteInvitation 
         groomName="Kenjabek"
-        brideName="Snejana"
+        brideName="Safiya"
         date="24 - APREL - 2026"
         time="19:00"
         locationName="Demir (Asr)"

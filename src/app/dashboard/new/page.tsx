@@ -45,16 +45,16 @@ export default function NewInvitationPage() {
     invites.push(newInvitation);
     localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
-    const hasRealDb = process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
-    if (hasRealDb) {
-        try {
-            await supabase.from('invitations').insert({
-                id: newId,
-                slug: newInvitation.slug,
-                is_paid: false,
-                content: newInvitation.content
-            });
-        } catch (e) { console.error(e); }
+    // 2. Sync with Supabase (CRITICAL FOR CROSS-DEVICE CONSISTENCY)
+    try {
+        await supabase.from('invitations').upsert({
+            id: newId,
+            slug: newInvitation.slug,
+            is_paid: false,
+            content: newInvitation.content
+        });
+    } catch (e) { 
+        console.error('DATABASE SYNC ERROR:', e);
     }
     router.push(`/dashboard/edit/${newId}`);
   };

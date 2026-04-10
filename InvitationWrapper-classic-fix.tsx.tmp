@@ -1,0 +1,32 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import GoldClassicInvitation from '@/components/GoldClassicInvitation';
+
+export default function InvitationWrapper() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <div className="min-h-screen bg-black">
+        <GoldClassicInvitation 
+          groomName="Kenjabek"
+          brideName="Snejana"
+          date="24 - APREL - 2026"
+          time="19:00"
+          locationName="Demir (Asr)"
+          locationAddress="Jizzax Shahar"
+          locationUrl="https://www.google.com/maps"
+          musicUrl="/assets/die_with_a_smile.mp3"
+          cardName="Kenjabek"
+          showGift={true}
+          description="Hayotimizning unutilmas kunida biz bilan birga bo'ling."
+        />
+    </div>
+  );
+}

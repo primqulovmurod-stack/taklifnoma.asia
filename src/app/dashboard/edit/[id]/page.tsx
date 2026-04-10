@@ -337,10 +337,8 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
         }
         localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
 
-        // 2. Sync with Supabase (CRITICAL FOR ADMIN PANEL)
-        const hasRealDb = process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
-        
-        if (hasRealDb) {
+        // 2. Sync with Supabase (CRITICAL FOR CROSS-DEVICE CONSISTENCY)
+        try {
             const { error } = await supabase
                 .from('invitations')
                 .upsert({
