@@ -65,26 +65,36 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+        setLoading(true);
+        // Always try Supabase first
+        const { data, error } = await supabase.from('invitations').select('*').order('created_at', { ascending: false });
         
-        if (isPlaceholder) {
-            // Local Storage Fallback
+        if (error) {
+            console.error('Supabase fetch error:', error);
+            // Fallback to local storage on DB error
             const localData = localStorage.getItem('taklifnoma_invitations');
             if (localData) {
                 setInvitations(JSON.parse(localData));
             } else {
-                // Initialize with mocks if empty
                 setInvitations(mockInvitations);
-                localStorage.setItem('taklifnoma_invitations', JSON.stringify(mockInvitations));
             }
+        } else if (data && data.length > 0) {
+            setInvitations(data);
+            // Also update local storage for offline use
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(data));
         } else {
-            const { data, error } = await supabase.from('invitations').select('*');
-            if (error) throw error;
-            setInvitations(data || []);
+            // No data in Supabase, check local storage
+            const localData = localStorage.getItem('taklifnoma_invitations');
+            if (localData) {
+                setInvitations(JSON.parse(localData));
+            } else {
+                setInvitations(mockInvitations);
+            }
         }
       } catch (err) {
-        console.error('Fetch error:', err);
-        setInvitations(mockInvitations);
+        console.error('Fetch catch error:', err);
+        const localData = localStorage.getItem('taklifnoma_invitations');
+        setInvitations(localData ? JSON.parse(localData) : mockInvitations);
       } finally {
         setLoading(false);
       }

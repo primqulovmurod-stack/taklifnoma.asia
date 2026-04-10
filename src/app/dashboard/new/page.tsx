@@ -47,14 +47,23 @@ export default function NewInvitationPage() {
 
     // 2. Sync with Supabase (CRITICAL FOR CROSS-DEVICE CONSISTENCY)
     try {
-        await supabase.from('invitations').upsert({
+        console.log('Syncing new invitation to Supabase:', newId);
+        const { error } = await supabase.from('invitations').upsert({
             id: newId,
             slug: newInvitation.slug,
             is_paid: false,
             content: newInvitation.content
         });
-    } catch (e) { 
-        console.error('DATABASE SYNC ERROR:', e);
+
+        if (error) {
+            console.error('Supabase UPSERT error:', error);
+            alert("MA'LUMOTLAR FAQAT BRAUZERDA SAQLANDI: Supabase xatosi: " + error.message);
+        } else {
+            console.log('Supabase sync successful');
+        }
+    } catch (e: any) { 
+        console.error('DATABASE SYNC FATAL:', e);
+        alert("Fatal xatolik: Cloud bazasiga ulanib bo'lmadi.");
     }
     router.push(`/dashboard/edit/${newId}`);
   };

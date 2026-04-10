@@ -61,22 +61,27 @@ export default function AdminPanel() {
   const loadData = async () => {
     setLoading(true);
     try {
-        const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+        // Fetch from Supabase
+        const { data: invData, error: invError } = await supabase
+            .from('invitations')
+            .select('*')
+            .order('created_at', { ascending: false });
         
-        if (isPlaceholder) {
+        if (invError) {
+            console.error('Admin fetch error:', invError);
+            // Backup fallback to local storage
             const localData = localStorage.getItem('taklifnoma_invitations');
             if (localData) setInvitations(JSON.parse(localData));
+        } else if (invData && invData.length > 0) {
+            setInvitations(invData);
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(invData));
         } else {
-            const { data: invData, error: invError } = await supabase
-                .from('invitations')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (invError) throw invError;
-            setInvitations(invData || []);
+            // Check local storage if DB is empty
+            const localData = localStorage.getItem('taklifnoma_invitations');
+            if (localData) setInvitations(JSON.parse(localData));
         }
     } catch (err) {
-        console.error(err);
+        console.error('Fatal loadData error:', err);
     } finally {
         setLoading(false);
     }
@@ -91,39 +96,42 @@ export default function AdminPanel() {
     ));
 
     try {
-        const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
-        
-        if (!isPlaceholder) {
-            console.log('Attempting to toggle status via API:', id);
-            const response = await fetch('/api/admin/toggle-status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Taklifnoma2026!'
-                },
-                body: JSON.stringify({ id, isPaid: newStatus })
-            });
+        console.log('Attempting to toggle status via API:', id);
+        const response = await fetch('/api/admin/toggle-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Taklifnoma2026!'
+            },
+            body: JSON.stringify({ id, isPaid: newStatus })
+        });
 
-            if (!response.ok) {
-                const error = await response.json();
-                console.error('TOGGLE API ERROR:', error);
-                alert("Statusni yangilab bo'lmadi: " + (error.error || response.statusText));
-                
-                // Revert UI if DB failed
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('TOGGLE API ERROR:', error);
+            
+            // If API fails, try direct Supabase update (as backup)
+            const { error: dbError } = await supabase
+                .from('invitations')
+                .update({ is_paid: newStatus })
+                .eq('id', id);
+
+            if (dbError) {
+                console.error('Direct toggle error:', dbError);
+                alert("Statusni yangilab bo'lmadi! API va DB xatosi.");
+                // Revert UI
                 setInvitations(prev => prev.map(inv => 
                     inv.id === id ? { ...inv, is_paid: currentStatus } : inv
                 ));
-            } else {
-                console.log('Status toggle successful via API');
             }
-        } else {
-            // Placeholder/LocalStorage updates
-            const localData = localStorage.getItem('taklifnoma_invitations');
-            if (localData) {
-                let invites = JSON.parse(localData);
-                invites = invites.map((inv: any) => inv.id === id ? { ...inv, is_paid: newStatus } : inv);
-                localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
-            }
+        }
+        
+        // Always update local storage for consistency
+        const localData = localStorage.getItem('taklifnoma_invitations');
+        if (localData) {
+            let invites = JSON.parse(localData);
+            invites = invites.map((inv: any) => inv.id === id ? { ...inv, is_paid: newStatus } : inv);
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
         }
     } catch (err: any) {
         console.error('Fatal toggle status error:', err);
@@ -135,36 +143,41 @@ export default function AdminPanel() {
   };
 
   const deleteInvite = async (id: string) => {
+    if (!confirm("Ushbu taklifnomani butunlay o'chirib tashlamoqchimisiz?")) return;
+    
     const original = [...invitations];
     try {
             setInvitations(prev => prev.filter(inv => inv.id !== id));
             
-            const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
-            
-            if (!isPlaceholder) {
-                console.log('Attempting to delete invitation via API:', id);
-                const response = await fetch(`/api/admin/delete?id=${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Taklifnoma2026!'
-                    }
-                });
+            console.log('Attempting to delete invitation via API:', id);
+            const response = await fetch(`/api/admin/delete?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Taklifnoma2026!'
+                }
+            });
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    console.error('DELETE API ERROR:', error);
-                    alert("O'chirib bo'lmadi: " + (error.error || response.statusText));
+            if (!response.ok) {
+                const error = await response.json();
+                console.error('DELETE API ERROR:', error);
+                
+                // Backup: Direct delete
+                const { error: dbError } = await supabase.from('invitations').delete().eq('id', id);
+                
+                if (dbError) {
+                    alert("O'chirib bo'lmadi! API va DB xatosi: " + dbError.message);
                     setInvitations(original);
-                } else {
-                    console.log('Delete successful via API');
                 }
             } else {
-                const localData = localStorage.getItem('taklifnoma_invitations');
-                if (localData) {
-                    let invites = JSON.parse(localData);
-                    invites = invites.filter((inv: any) => inv.id !== id);
-                    localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
-                }
+                console.log('Delete successful via API');
+            }
+            
+            // Sync local storage
+            const localData = localStorage.getItem('taklifnoma_invitations');
+            if (localData) {
+                let invites = JSON.parse(localData);
+                invites = invites.filter((inv: any) => inv.id !== id);
+                localStorage.setItem('taklifnoma_invitations', JSON.stringify(invites));
             }
         } catch (err: any) {
             console.error('Delete error:', err);

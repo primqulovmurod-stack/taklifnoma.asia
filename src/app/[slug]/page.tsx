@@ -24,24 +24,13 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
           .single();
 
         if (error) {
-          console.log('Not in DB, checking local storage...');
-          // Check local storage as fallback
-          const localData = typeof window !== 'undefined' ? localStorage.getItem('taklifnoma_invitations') : null;
-          if (localData) {
-            const invites = JSON.parse(localData);
-            const found = invites.find((inv: any) => inv.slug === slug);
-            if (found) {
-                setInvitation(found);
-                setLoading(false);
-                return;
-            }
-          }
+          console.error('Supabase fetch error:', error);
           setInvitation(null);
         } else {
           setInvitation(data);
         }
       } catch (err) {
-        console.error(err);
+        console.error('Fatal fetch error:', err);
         setInvitation(null);
       } finally {
         setLoading(false);
