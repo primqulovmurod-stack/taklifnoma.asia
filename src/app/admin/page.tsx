@@ -310,16 +310,15 @@ export default function AdminPanel() {
                             <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 whitespace-nowrap">Shaxs</th>
                             <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 whitespace-nowrap">Telefon</th>
                             <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 whitespace-nowrap">Email</th>
-                            <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 whitespace-nowrap">Manba</th>
                             <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 whitespace-nowrap">Holat</th>
                             <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right whitespace-nowrap">Amallar</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
                         {loading ? (
-                            <tr><td colSpan={8} className="p-20 text-center text-gray-400 font-bold animate-pulse">Yuklanmoqda...</td></tr>
+                            <tr><td colSpan={7} className="p-20 text-center text-gray-400 font-bold animate-pulse">Yuklanmoqda...</td></tr>
                         ) : filtered.length === 0 ? (
-                            <tr><td colSpan={8} className="p-20 text-center text-gray-400 font-bold">Hech narsa topilmadi.</td></tr>
+                            <tr><td colSpan={7} className="p-20 text-center text-gray-400 font-bold">Hech narsa topilmadi.</td></tr>
                         ) : filtered.map((inv, index) => (
                             <tr key={inv.id} className="hover:bg-white/5 transition-colors group">
                                 <td className="px-6 py-6 whitespace-nowrap">
@@ -340,14 +339,9 @@ export default function AdminPanel() {
                                     </div>
                                 </td>
                                 <td className="px-6 py-6 whitespace-nowrap">
-                                    <div className="flex items-center gap-3 max-w-[180px]">
-                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[#E11D48] bg-white/5 border border-white/5 group-hover:border-[#E11D48]/20 transition-all flex-shrink-0">
-                                            <Heart size={14} />
-                                        </div>
-                                        <div className="truncate">
-                                            <p className="text-sm font-black transition-colors text-white truncate">{inv.content?.groomName} & {inv.content?.brideName}</p>
-                                            <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest truncate">{inv.content?.theme || 'Custom Style'}</p>
-                                        </div>
+                                    <div className="flex flex-col max-w-[180px]">
+                                        <p className="text-sm font-black transition-colors text-white truncate">{inv.content?.groomName} & {inv.content?.brideName}</p>
+                                        <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest truncate">{inv.content?.theme || 'Custom Style'}</p>
                                     </div>
                                 </td>
                                 <td className="px-6 py-6 whitespace-nowrap">
@@ -369,19 +363,6 @@ export default function AdminPanel() {
                                             {inv.email || inv.content?.email || 'Noma\'lum'}
                                         </span>
                                      </div>
-                                </td>
-                                <td className="px-6 py-6 whitespace-nowrap">
-                                    {inv.source === 'google' || inv.content?.source === 'google' ? (
-                                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 w-fit">
-                                            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" className="w-3.5 h-3.5" alt="Google" />
-                                            <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">Google</span>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-gray-500/10 border border-white/5 w-fit">
-                                            <ExternalLink size={10} className="text-gray-500" />
-                                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Direkt</span>
-                                        </div>
-                                    )}
                                 </td>
                                 <td className="px-6 py-6 whitespace-nowrap">
                                     <button 
