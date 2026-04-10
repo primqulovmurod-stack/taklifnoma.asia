@@ -256,7 +256,8 @@ export default function AdminPanel() {
                 </div>
                 <div className="flex items-center gap-4">
                   <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center gap-4">
-                    Boshqaruv Paneli <span className="text-sm font-light text-gray-500">(v2.2)</span>
+                    Boshqaruv Paneli <span className="text-sm font-light text-gray-500">(v2.3)</span>
+                    <span className="px-3 py-1 bg-yellow-400 text-black text-[10px] font-black rounded-full uppercase">Yangi Admin</span>
                     <ShieldCheck className="text-[#E11D48] w-8 h-8 animate-pulse" />
                   </h1>
                 </div>
