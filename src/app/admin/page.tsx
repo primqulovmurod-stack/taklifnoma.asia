@@ -415,6 +415,7 @@ export default function AdminPanel() {
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
