@@ -161,25 +161,21 @@ export default function AdminPanel() {
     }
   };
 
-  const deleteInvite = async (e: any, id: string) => {
-    // Check if capture works
-    console.log('CLICKED DELETE FOR ID:', id);
-    
-    if (!id) {
-        alert("Xatolik: ID mavjud emas!");
+  const deleteInvite = async (invId: string) => {
+    if (!invId) {
+        alert("XALOLIK: Taklifnoma ID topilmadi!");
         return;
     }
 
-    const isConfirmed = confirm(`ID: ${id}\n\nUshbu taklifnomani o'chirib tashlamoqchimisiz?`);
-    if (!isConfirmed) return;
+    const confirmed = window.confirm("Ushbu taklifnomani (+ rasm/fayllarni) butunlay o'chirib tashlamoqchimisiz?");
+    if (!confirmed) return;
 
-    const original = [...invitations];
+    const originalData = [...invitations];
     try {
-        // 1. Optimistic Update
-        setInvitations(prev => prev.filter(inv => inv.id !== id));
-        
-        console.log('Sending DELETE request to API...');
-        const response = await fetch(`/api/admin/delete?id=${id}`, {
+        // UI dan vaqtinchalik olib tashlash
+        setInvitations(prev => prev.filter(item => item.id !== invId));
+
+        const response = await fetch(`/api/admin/delete?id=${invId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': 'Taklifnoma2026!'
@@ -187,22 +183,20 @@ export default function AdminPanel() {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Server error');
-        }
-        
-        // localStorage sync
-        const localData = localStorage.getItem('taklifnoma_invitations');
-        if (localData) {
-            const parsed = JSON.parse(localData).filter((inv: any) => inv.id !== id);
-            localStorage.setItem('taklifnoma_invitations', JSON.stringify(parsed));
+            throw new Error("Serverda o'chirishda xatolik yuz berdi.");
         }
 
-        alert("Taklifnoma o'chirildi! ✅");
-    } catch (err: any) {
-        console.error('Delete operation failed:', err);
-        alert(`O'chirishda xatolik: ${err.message} ❌`);
-        setInvitations(original);
+        // Local storage sync
+        const local = localStorage.getItem('taklifnoma_invitations');
+        if (local) {
+            const data = JSON.parse(local).filter((x: any) => x.id !== invId);
+            localStorage.setItem('taklifnoma_invitations', JSON.stringify(data));
+        }
+
+        alert("Taklifnoma muvaffaqiyatli o'chirildi! ✅");
+    } catch (err) {
+        alert("Xatolik: O'chirib bo'lmadi! ❌");
+        setInvitations(originalData); // Qaytarish
     }
   };
 
@@ -392,8 +386,8 @@ export default function AdminPanel() {
                                             <Send size={14} />
                                         </button>
                                         <button 
-                                          onClick={(e) => deleteInvite(e, inv.id)}
-                                          className="relative z-10 p-3 text-gray-400 hover:text-white hover:bg-red-500 rounded-xl transition-all shadow-sm hover:shadow-red-500/20 active:scale-90"
+                                          onClick={() => deleteInvite(inv.id)}
+                                          className="p-3 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-lg active:scale-95"
                                           title="O'chirish"
                                         >
                                             <Trash2 size={18} />
