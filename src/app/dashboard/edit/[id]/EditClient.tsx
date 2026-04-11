@@ -273,7 +273,7 @@ export default function EditClient({ id }: { id: string }) {
     setContent(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = async (forcedPhone?: string) => {
+  const handleSave = async (showPaymentOnSuccess: boolean = false, forcedPhone?: string) => {
     setIsSaving(true);
     const finalSlug = generateSlug(content.groomName, content.brideName, content.date);
     const finalContent = forcedPhone ? { ...content, phone: forcedPhone } : content;
@@ -303,7 +303,9 @@ export default function EditClient({ id }: { id: string }) {
             
         if (error) throw error;
         
-        if (isPaid) {
+        if (!isPaid && showPaymentOnSuccess) {
+            setShowPayment(true);
+        } else if (isPaid) {
             const url = `https://taklifnoma.asia/${finalSlug}`;
             navigator.clipboard.writeText(url);
             setIsCopied(true);
@@ -319,24 +321,15 @@ export default function EditClient({ id }: { id: string }) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleExport = () => {
-      // If already paid, just save and show copy notification
-      if (isPaid) {
-          handleSave();
-          return;
-      }
-
-      // If not paid, trigger payment modal
-      setShowPayment(true);
-
       const isValidPhone = content.phone && content.phone.startsWith('+998') && content.phone.length >= 17;
       if (isValidPhone) {
-          handleSave();
+          handleSave(true);
           return;
       }
       const savedPhone = localStorage.getItem('user_phone');
       if (savedPhone && savedPhone.startsWith('+998') && savedPhone.length >= 17) {
           setContent(prev => ({ ...prev, phone: savedPhone }));
-          handleSave(savedPhone);
+          handleSave(true, savedPhone);
           return;
       }
       window.dispatchEvent(new CustomEvent('trigger-lead-modal', { 
@@ -377,7 +370,7 @@ export default function EditClient({ id }: { id: string }) {
                     {isPaid ? 'Faol ✅' : 'To\'lov kutilmoqda'}
                 </div>
                 <button 
-                  onClick={() => handleSave()}
+                  onClick={() => handleSave(false)}
                   className="flex items-center gap-1.5 px-4 py-2 bg-[#E11D48] text-white rounded-xl transition-all shadow-lg shadow-[#E11D48]/20"
                 >
                     {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
