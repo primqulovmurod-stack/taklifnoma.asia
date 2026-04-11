@@ -31,6 +31,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { InvitationContent } from '@/lib/types';
 import { supabase } from '@/lib/supabase';
 import TemplatePreview, { templates } from '@/components/dashboard/TemplatePreview';
@@ -952,9 +953,22 @@ function EditInvitationPageInner({ id }: { id: string }) {
   );
 }
 
+// Dynamically import the inner component with SSR disabled to prevent 500 errors on Vercel
+const DynamicEditInner = dynamic(() => Promise.resolve(EditInvitationPageInner), {
+    ssr: false,
+    loading: () => (
+        <div className="min-h-screen flex items-center justify-center bg-[#FFF9FA]">
+            <div className="flex flex-col items-center gap-4">
+                <div className="w-12 h-12 border-4 border-[#E11D48] border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#E11D48] animate-pulse">Yuklanmoqda...</p>
+            </div>
+        </div>
+    )
+});
+
 function EditPageLoader({ params }: { params: Promise<{ id: string }> }) {
     const { id } = React.use(params);
-    return <EditInvitationPageInner id={id} />;
+    return <DynamicEditInner id={id} />;
 }
 
 export default function EditInvitationPage(props: any) {
