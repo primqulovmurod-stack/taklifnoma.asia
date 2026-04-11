@@ -100,32 +100,26 @@ export default function EditClient({ id }: { id: string }) {
 
     setIsImageUploading(true);
     try {
-        const { data: buckets, error: bucketError } = await supabase.storage.listBuckets();
-        let publicUrl = "";
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${id}-${Date.now()}-${fieldName}.${fileExt}`;
+        const filePath = `images/${fileName}`;
 
-        if (bucketError || !buckets.find(b => b.name === 'invitations')) {
-          publicUrl = URL.createObjectURL(file);
-        } else {
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${id}-${Date.now()}.${fileExt}`;
-          const filePath = `images/${fileName}`;
+        const { error: uploadError } = await supabase.storage
+            .from('invitations')
+            .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
-          const { error: uploadError } = await supabase.storage
-              .from('invitations')
-              .upload(filePath, file, { cacheControl: '3600', upsert: false });
-
-          if (uploadError) throw uploadError;
-
-          const { data: { publicUrl: supabaseUrl } } = supabase.storage
-              .from('invitations')
-              .getPublicUrl(filePath);
-          
-          publicUrl = supabaseUrl;
+        if (uploadError) {
+          console.error('SUPABASE UPLOAD ERROR:', uploadError);
+          throw uploadError;
         }
 
-        updateField(fieldName, publicUrl);
+        const { data: { publicUrl: supabaseUrl } } = supabase.storage
+            .from('invitations')
+            .getPublicUrl(filePath);
+        
+        updateField(fieldName, supabaseUrl);
     } catch (err: any) {
-        console.error('IMAGE UPLOAD ERROR:', err);
+        console.error('IMAGE UPLOAD FALLBACK TO BLOB:', err);
         const localUrl = URL.createObjectURL(file);
         updateField(fieldName, localUrl);
     } finally {
@@ -268,6 +262,17 @@ export default function EditClient({ id }: { id: string }) {
     }
     return () => clearInterval(interval);
   }, [isPaid, id]);
+
+  useEffect(() => {
+    const handleUpdate = (e: any) => {
+        if (e.detail?.phone) {
+            setContent(prev => ({ ...prev, phone: e.detail.phone }));
+            handleSave(true, e.detail.phone);
+        }
+    };
+    window.addEventListener('invitation-updated', handleUpdate);
+    return () => window.removeEventListener('invitation-updated', handleUpdate);
+  }, [id]);
 
   const updateField = (field: keyof InvitationContent, value: any) => {
     setContent(prev => ({ ...prev, [field]: value }));
