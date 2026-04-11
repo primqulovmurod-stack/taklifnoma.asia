@@ -19,26 +19,27 @@ const CountdownSection: React.FC<CountdownSectionProps> = ({ weddingDate, isPrev
   useEffect(() => {
     let targetDate = new Date();
     
-    // Parse DD.MM.YYYY format
-    if (weddingDate && weddingDate.includes('.')) {
-      const parts = weddingDate.split('.');
-      if (parts.length === 3) {
-        const day = parts[0].trim();
-        const month = parts[1].trim();
-        const year = parts[2].trim();
-        const isoDate = `${year}-${month}-${day}T18:00:00`;
-        const parsed = new Date(isoDate);
-        if (!isNaN(parsed.getTime())) {
-          targetDate = parsed;
-        }
+    const parseWeddingDate = (dateStr?: string) => {
+      if (!dateStr) return new Date();
+      
+      const uzbekFormat = /^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/;
+      const match = dateStr.trim().match(uzbekFormat);
+      
+      if (match) {
+        const day = parseInt(match[1]);
+        const month = parseInt(match[2]) - 1;
+        const year = parseInt(match[3]);
+        const d = new Date(year, month, day, 18, 0, 0); // Default to 6 PM
+        if (!isNaN(d.getTime())) return d;
       }
-    } else if (weddingDate) {
-      // Fallback for YYYY-MM-DD
-      const parsed = new Date(weddingDate);
-      if (!isNaN(parsed.getTime())) {
-          targetDate = parsed;
-      }
-    }
+      
+      const standard = new Date(dateStr);
+      if (!isNaN(standard.getTime())) return standard;
+      
+      return new Date();
+    };
+
+    targetDate = parseWeddingDate(weddingDate);
 
     const timer = setInterval(() => {
       const now = new Date().getTime();

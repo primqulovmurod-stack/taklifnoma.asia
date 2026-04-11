@@ -6,15 +6,30 @@ import { motion } from 'framer-motion';
 export function CalendarSection({ date, isPreview = false }: { date?: string; isPreview?: boolean }) {
   const days = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'];
   
-  // Parse date safely
-  let weddingDate = new Date();
-  if (date) {
-    const parsed = new Date(date);
-    if (!isNaN(parsed.getTime())) {
-      weddingDate = parsed;
+  // Improved date parsing for various formats (Uzbek: DD.MM.YYYY or ISO: YYYY-MM-DD)
+  const parseWeddingDate = (dateStr?: string) => {
+    if (!dateStr) return new Date();
+    
+    // Check for DD.MM.YYYY format
+    const uzbekFormat = /^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/;
+    const match = dateStr.trim().match(uzbekFormat);
+    
+    if (match) {
+      const day = parseInt(match[1]);
+      const month = parseInt(match[2]) - 1; // 0-indexed
+      const year = parseInt(match[3]);
+      const d = new Date(year, month, day);
+      if (!isNaN(d.getTime())) return d;
     }
-  }
-  
+    
+    // Fallback to standard parsing
+    const standard = new Date(dateStr);
+    if (!isNaN(standard.getTime())) return standard;
+    
+    return new Date();
+  };
+
+  const weddingDate = parseWeddingDate(date);
   const year = weddingDate.getFullYear();
   const month = weddingDate.getMonth();
   const highlightedDay = weddingDate.getDate();
