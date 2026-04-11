@@ -63,7 +63,7 @@ const INITIAL_CONTENT: InvitationContent = {
   description: "Bizning hayotimizdagi eng muhim va unutilmas kunda yonimizda bo'lishingizdan bag'oyatda xursandmiz. Ushbu kunni biz bilan baham ko'ring."
 };
 
-export default function EditInvitationPage({ params }: { params: Promise<{ id: string }> }) {
+function EditInvitationPageInner({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateParam = searchParams.get('template');
@@ -952,4 +952,12 @@ export default function EditInvitationPage({ params }: { params: Promise<{ id: s
       <LeadCaptureModal />
     </div>
   );
+}
+
+export default function EditInvitationPage(props: any) {
+    return (
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#FFF9FA]"><div className="w-10 h-10 border-4 border-[#E11D48] border-t-transparent rounded-full animate-spin"></div></div>}>
+            <EditInvitationPageInner {...props} />
+        </React.Suspense>
+    );
 }
