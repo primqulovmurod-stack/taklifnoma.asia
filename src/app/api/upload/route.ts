@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
+export async function GET() {
+  return NextResponse.json({ message: 'Upload API is live' });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
