@@ -65,7 +65,7 @@ export default function PaymentModal({
       }, (payload) => {
           if (payload.new.is_paid) {
               setIsPaid(true);
-              setStep('details');
+              setStep('success');
               onSuccess();
           }
       })
@@ -338,20 +338,49 @@ export default function PaymentModal({
 
                     <div className="space-y-6 relative z-10 text-center flex flex-col items-center">
                         <div className="space-y-2">
-                            <h3 className="font-playfair text-3xl font-black text-gray-900 leading-tight">Yuborildi!</h3>
-                            <p className="text-gray-400 text-md font-medium px-4">Xabar yuborildi. Faollashtirish uchun Telegram'dan skrinshot yuboring.</p>
+                            <h3 className={`font-playfair text-3xl font-black leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                {isPaid ? 'Muvaffaqiyatli!' : 'Yuborildi!'}
+                            </h3>
+                            <p className="text-gray-400 text-md font-medium px-4">
+                                {isPaid ? 'Sizning taklifnomangiz endi hamma uchun ochiq!' : 'Xabar yuborildi. Faollashtirish uchun Telegram\'dan skrinshot yuboring.'}
+                            </p>
                         </div>
                         
                         <div className="pt-8 w-full space-y-4">
-                            <a 
-                                href={`https://t.me/Taklifnoma_Asia?text=Assalomu alaykum, to'lov qildim. ID: ${slug || invitationId}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-4 py-6 rounded-2xl bg-[#229ED9] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#229ED9]/30 hover:brightness-110 active:scale-95 transition-all"
-                            >
-                                <Send size={20} />
-                                <span>TELEGRAMGA OTISH</span>
-                            </a>
+                            {isPaid ? (
+                                <>
+                                    <button 
+                                        onClick={handleShare}
+                                        className="w-full flex items-center justify-center gap-4 py-6 rounded-2xl bg-[#229ED9] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#229ED9]/30 hover:brightness-110 active:scale-95 transition-all"
+                                    >
+                                        <Send size={20} />
+                                        <span>TELEGRAM’DA ULASHISH</span>
+                                    </button>
+                                    <button 
+                                        onClick={handleCopy}
+                                        className={`w-full flex items-center justify-center gap-4 py-6 rounded-2xl font-black text-sm uppercase tracking-widest transition-all border-2 ${
+                                            copied 
+                                            ? 'bg-green-50 text-green-600 border-green-100' 
+                                            : isDarkMode 
+                                                ? 'bg-white/10 text-white border-white/10 hover:bg-white/20'
+                                                : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50 active:scale-95'
+                                        }`}
+                                    >
+                                        {copied ? <CheckCircle size={20} /> : <Share2 size={20} />}
+                                        <span>{copied ? 'NUSXALANDI!' : 'HAVOLANI NUSXALASH'}</span>
+                                    </button>
+                                </>
+                            ) : (
+                                <a 
+                                    href={`https://t.me/Taklifnoma_Asia?text=Assalomu alaykum, to'lov qildim. ID: ${slug || invitationId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full flex items-center justify-center gap-4 py-6 rounded-2xl bg-[#229ED9] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[#229ED9]/30 hover:brightness-110 active:scale-95 transition-all"
+                                >
+                                    <Send size={20} />
+                                    <span>TELEGRAMGA OTISH</span>
+                                </a>
+                            )}
                             <button 
                                 onClick={handleFinish}
                                 className="w-full py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-500 transition-colors"
