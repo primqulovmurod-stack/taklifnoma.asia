@@ -396,7 +396,7 @@ export default function EditClient({ id }: { id: string }) {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-12 pb-64 no-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 space-y-12 no-scrollbar">
           <section className="space-y-6">
             <h3 className="text-[10px] font-black text-[#E11D48] uppercase tracking-[0.2em] flex items-center gap-2">
                 <Heart size={14} fill="currentColor" /> Asosiy ma'lumotlar
@@ -500,7 +500,7 @@ export default function EditClient({ id }: { id: string }) {
               )}
           </section>
 
-          <section className="pb-6">
+          <section className="pb-0">
               <button 
                 onClick={handleExport}
                 className="w-full py-6 bg-[#E11D48] text-white rounded-[2rem] font-black text-[12px] uppercase tracking-widest shadow-2xl shadow-[#E11D48]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
