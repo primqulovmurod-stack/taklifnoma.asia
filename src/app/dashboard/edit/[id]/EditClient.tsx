@@ -499,12 +499,12 @@ export default function EditClient({ id }: { id: string }) {
               )}
           </section>
 
-          <section className="pb-32">
+          <section className="pb-6">
               <button 
                 onClick={handleExport}
                 className="w-full py-6 bg-[#E11D48] text-white rounded-[2rem] font-black text-[12px] uppercase tracking-widest shadow-2xl shadow-[#E11D48]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
               >
-                  <Sparkles size={18} /> TAYYORLASH (EXPORT)
+                  <Send size={18} /> YUBORISH
               </button>
           </section>
         </div>
