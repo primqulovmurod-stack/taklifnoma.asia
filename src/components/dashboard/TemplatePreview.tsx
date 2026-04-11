@@ -19,7 +19,7 @@ export const templates = [
   { 
     id: 'pink-luxury', 
     name: 'Pink Luxury Special', 
-    image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop',
+    image: '/assets/pink_invite_mockup.png',
     style: 'Modern & Soft'
   },
   { 
