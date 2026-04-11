@@ -301,11 +301,11 @@ export default function EditClient({ id }: { id: string }) {
                 user_id: user?.id
             });
             
-        if (error) throw error;
-        
-        if (!isPaid && showPaymentOnSuccess) {
+        if (showPaymentOnSuccess) {
             setShowPayment(true);
-        } else if (isPaid) {
+        }
+        
+        if (isPaid) {
             const url = `https://taklifnoma.asia/${finalSlug}`;
             navigator.clipboard.writeText(url);
             setIsCopied(true);
