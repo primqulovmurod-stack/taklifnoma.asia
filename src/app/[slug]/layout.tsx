@@ -41,11 +41,11 @@ export async function generateMetadata(
   // 2. Generate Dynamic OG Image URL
   // We use the full URL if we're in production, or fallback for localhost
   const theme = invitation.content.theme || 'pink-luxury';
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://taklifnoma.asia';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.taklifnoma.asia';
   const ogImage = `${baseUrl}/api/og?groom=${encodeURIComponent(groomName)}&bride=${encodeURIComponent(brideName)}&date=${encodeURIComponent(date)}&theme=${encodeURIComponent(theme)}`;
 
     return {
-      metadataBase: new URL('https://taklifnoma.asia'),
+      metadataBase: new URL('https://www.taklifnoma.asia'),
       title,
       description,
       openGraph: {

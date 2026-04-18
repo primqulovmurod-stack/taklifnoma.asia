@@ -45,7 +45,7 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://taklifnoma.asia'),
+  metadataBase: new URL('https://www.taklifnoma.asia'),
   title: "Kenjabek & Safiya - Nikoh to'yi",
   description: "Bizning baxtli kunimizga lutfan taklif etamiz!",
   openGraph: {
