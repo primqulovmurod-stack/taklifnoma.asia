@@ -45,6 +45,7 @@ export async function generateMetadata(
   const ogImage = `${baseUrl}/api/og?groom=${encodeURIComponent(groomName)}&bride=${encodeURIComponent(brideName)}&date=${encodeURIComponent(date)}&theme=${encodeURIComponent(theme)}`;
 
     return {
+      metadataBase: new URL('https://taklifnoma.asia'),
       title,
       description,
       openGraph: {
