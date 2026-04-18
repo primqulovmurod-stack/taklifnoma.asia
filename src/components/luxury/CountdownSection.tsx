@@ -85,7 +85,7 @@ const CountdownSection: React.FC<CountdownSectionProps> = ({ weddingDate, isPrev
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#E11D48]">Teskari Sanoq</span>
             <div className="h-[1px] w-8 bg-[#E11D48]/30"></div>
           </div>
-          <h2 className={`${isPreview ? 'text-base' : 'text-xl'} font-serif text-[#0F172A]`}>Baxitli kunimizga qolgan vaqt</h2>
+          <h2 className={`${isPreview ? 'text-base' : 'text-xl'} font-serif text-[#0F172A]`}>Baxtli kunimizga qolgan vaqt</h2>
         </motion.div>
 
         <div className="grid grid-cols-4 gap-3 md:gap-4">
