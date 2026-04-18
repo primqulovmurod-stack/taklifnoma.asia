@@ -42,8 +42,7 @@ export async function GET(req: NextRequest) {
               display: 'flex',
               height: '100%',
               width: '100%',
-              backgroundColor: styleConfig.bg,
-              backgroundImage: styleConfig.gradient,
+              backgroundColor: isDark ? '#0A0A0A' : '#FFF5F7',
               alignItems: 'center',
               justifyContent: 'center',
               position: 'relative',
@@ -52,8 +51,8 @@ export async function GET(req: NextRequest) {
               padding: '60px',
             }}
           >
-            {/* Background for Themes */}
-            {['pink-flower', 'pink-white', 'pink-luxury'].includes(theme) ? (
+            {/* Background Image Layer */}
+            {isPink ? (
               <img 
                 src="https://www.taklifnoma.asia/assets/premium-pink-bg.png"
                 style={{
@@ -64,10 +63,18 @@ export async function GET(req: NextRequest) {
                   height: '630px',
                   objectFit: 'cover',
                 }}
-                alt="Pink Floral Background"
+                alt="Background"
               />
-            ) : isPink ? (
-              <img 
+            ) : isDark ? (
+              <div 
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'radial-gradient(circle at center, #1A1A1A 0%, #000000 100%)',
+                }}
+              />
+            ) : (
+                <img 
                 src="https://www.taklifnoma.asia/assets/floral-pearl.png"
                 style={{
                   position: 'absolute',
@@ -76,75 +83,65 @@ export async function GET(req: NextRequest) {
                   width: '1200px',
                   height: '630px',
                   objectFit: 'cover',
-                  opacity: 0.8,
                 }}
                 alt="Floral Background"
               />
-            ) : null}
-
-            {/* Content for Dark Theme (as per request) */}
-            {isDark ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: styleConfig.subtext, fontSize: '24px', letterSpacing: '8px', marginBottom: '30px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                  taklifnoma.asia
-                </div>
-
-                <div style={{ color: styleConfig.accent, fontSize: '60px', marginBottom: '20px' }}>
-                  ❤️
-                </div>
-
-                <div style={{ color: 'white', fontSize: '90px', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>
-                  {groom} & {bride}
-                </div>
-
-                <div style={{ color: '#9CA3AF', fontSize: '28px', letterSpacing: '6px', marginBottom: '40px', fontWeight: 'bold' }}>
-                  {styleConfig.label}
-                </div>
-
-                <div style={{ display: 'flex', padding: '12px 60px', backgroundColor: styleConfig.accent, borderRadius: '100px', color: 'white', fontSize: '30px', fontWeight: 'bold' }}>
-                  {date}
-                </div>
-
-                <div style={{ position: 'absolute', bottom: '40px', color: '#4B5563', fontSize: '18px', letterSpacing: '4px', fontWeight: 'bold' }}>
-                  2026 PREMIUM VIRTUAL EDITION
-                </div>
-              </div>
-            ) : (
-              /* Content for Floral/Light Themes */
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  padding: '50px 70px',
-                  borderRadius: '40px',
-                  width: '740px',
-                  border: '1px solid rgba(255,255,255,0.8)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
-                }}
-              >
-                <div style={{ color: styleConfig.accent, fontSize: '24px', letterSpacing: '4px', marginBottom: '30px', fontWeight: 'bold' }}>
-                  TAKLIFNOMA.ASIA
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '140px', height: '140px', borderRadius: '70px', border: `1px solid ${styleConfig.accent}`, marginBottom: '30px', color: styleConfig.accent, fontSize: '60px', opacity: 0.3 }}>
-                  {groom[0]}&{bride[0]}
-                </div>
-
-                <div style={{ display: 'flex', fontSize: '70px', fontWeight: 'bold', color: '#1A1A1A', textAlign: 'center', marginBottom: '10px' }}>
-                  {groom} & {bride}
-                </div>
-
-                <div style={{ fontSize: '24px', color: '#6B7280', marginBottom: '30px', fontWeight: 600, letterSpacing: '2px' }}>
-                  SIZ UCHUN MAXSUS TAKLIFNOMA
-                </div>
-
-                <div style={{ display: 'flex', padding: '14px 50px', backgroundColor: styleConfig.accent, borderRadius: '100px', color: 'white', fontSize: '28px', fontWeight: 'bold' }}>
-                  {date}
-                </div>
-              </div>
             )}
+
+            {/* Glass Card Layer */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                padding: '60px 80px',
+                borderRadius: '50px',
+                width: '800px',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 30px 60px rgba(0,0,0,0.1)',
+                backdropFilter: 'blur(10px)',
+                position: 'relative',
+              }}
+            >
+              {/* Gold Wax Seal (Floating) */}
+              <img 
+                src="https://www.taklifnoma.asia/assets/gold-wax-seal.png"
+                style={{
+                  position: 'absolute',
+                  top: '-40px',
+                  left: '40px',
+                  width: '120px',
+                  height: '120px',
+                  zIndex: 2,
+                }}
+                alt="Wax Seal"
+              />
+
+              {/* Logo / Site Title */}
+              <div style={{ color: isPink ? '#E11D48' : '#D4AF37', fontSize: '20px', letterSpacing: '8px', marginBottom: '30px', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                taklifnoma.asia
+              </div>
+
+              {/* Circular Initials (Subtle) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '120px', height: '120px', borderRadius: '60px', border: `1px solid ${isPink ? '#E11D48' : '#D4AF37'}`, marginBottom: '20px', color: isPink ? '#E11D48' : '#D4AF37', fontSize: '48px', opacity: 0.15 }}>
+                {groom[0]}&{bride[0]}
+              </div>
+
+              {/* The Names (Premium Look) */}
+              <div style={{ display: 'flex', fontSize: '80px', fontWeight: 'bold', color: '#1A1A1A', textAlign: 'center', marginBottom: '10px' }}>
+                {groom} & {bride}
+              </div>
+
+              <div style={{ fontSize: '24px', color: '#4B5563', letterSpacing: '4px', marginBottom: '40px' }}>
+                NIKOH TO'YI TAKLIFNOMASI
+              </div>
+
+              {/* Date Badge */}
+              <div style={{ display: 'flex', padding: '14px 60px', backgroundColor: isPink ? '#E11D48' : '#D4AF37', borderRadius: '100px', color: 'white', fontSize: '32px', fontWeight: 'bold' }}>
+                {date}
+              </div>
+            </div>
           </div>
       ),
       {
