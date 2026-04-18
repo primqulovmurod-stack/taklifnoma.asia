@@ -4,17 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Calendar, MapPin, Music, Heart, Phone, Clock, Share2, Sparkles, ChevronDown } from 'lucide-react';
 
-interface InvitationContent {
-  groomName: string;
-  brideName: string;
-  date: string;
-  time: string;
-  locationName: string;
-  locationAddress: string;
-  locationUrl: string;
-  musicUrl: string;
-  imageUrl: string;
-}
+import { InvitationContent } from '@/lib/types';
 
 const defaultContent: InvitationContent = {
   groomName: 'Xurshidbek',
@@ -240,7 +230,7 @@ const ShadcnAnimatedInvitation = ({ content = defaultContent }: { content?: Invi
                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div className="space-y-6">
                     <h2 className="text-4xl font-serif text-[#D4AF37]">Manzilimiz</h2>
-                    <p className="text-gray-400 font-light">{content.locationAddress}</p>
+                    <p className="text-gray-400 font-light">{content.locationAddress || ''}</p>
                     <div className="flex flex-col gap-4 pt-4">
                        <a 
                         href={content.locationUrl}

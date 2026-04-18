@@ -4,17 +4,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Calendar, MapPin, Music, Heart, Sparkles, Clock, Phone, ChevronDown } from 'lucide-react';
 
-interface InvitationContent {
-  groomName: string;
-  brideName: string;
-  date: string;
-  time: string;
-  locationName: string;
-  locationAddress: string;
-  locationUrl: string;
-  musicUrl: string;
-  imageUrl: string;
-}
+import { InvitationContent } from '@/lib/types';
 
 const defaultContent: InvitationContent = {
   groomName: 'George',
@@ -136,7 +126,7 @@ const WhiteGold3DInvitation = ({ content = defaultContent, isPreview = false }: 
                <div className="space-y-2">
                   <p className="text-xs font-bold uppercase tracking-widest text-[#4A4435]">@ {content.locationName}</p>
                   <p className="max-w-xs mx-auto text-[10px] leading-relaxed text-gray-500 uppercase tracking-widest">
-                    {content.locationAddress}
+                    {content.locationAddress || ''}
                   </p>
                </div>
                
