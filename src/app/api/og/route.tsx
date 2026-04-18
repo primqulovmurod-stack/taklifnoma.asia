@@ -88,60 +88,90 @@ export async function GET(req: NextRequest) {
               />
             )}
 
-            {/* Glass Card Layer */}
+            {/* Exactly Recreating the Website Card UI from Screenshot */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                padding: '60px 80px',
-                borderRadius: '50px',
-                width: '800px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                boxShadow: '0 30px 60px rgba(0,0,0,0.1)',
-                backdropFilter: 'blur(10px)',
+                backgroundColor: 'white',
+                padding: '40px 60px',
+                borderRadius: '60px',
+                width: '640px',
+                boxShadow: '0 40px 80px rgba(0,0,0,0.15)',
                 position: 'relative',
               }}
             >
-              {/* Gold Wax Seal (Floating) */}
-              <img 
-                src="https://www.taklifnoma.asia/assets/gold-wax-seal.png"
+              {/* Initials Circle with Purple Gradient / Stars look */}
+              <div
                 style={{
-                  position: 'absolute',
-                  top: '-40px',
-                  left: '40px',
-                  width: '120px',
-                  height: '120px',
-                  zIndex: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '160px',
+                  height: '160px',
+                  borderRadius: '100px',
+                  border: '1px solid rgba(147, 51, 234, 0.3)',
+                  background: 'radial-gradient(circle, rgba(147, 51, 234, 0.05) 0%, transparent 100%)',
+                  marginBottom: '30px',
+                  color: '#9333EA',
+                  fontSize: '60px',
+                  fontFamily: 'serif',
+                  fontStyle: 'italic',
+                  position: 'relative',
                 }}
-                alt="Wax Seal"
-              />
-
-              {/* Logo / Site Title */}
-              <div style={{ color: isPink ? '#E11D48' : '#D4AF37', fontSize: '20px', letterSpacing: '8px', marginBottom: '30px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                taklifnoma.asia
-              </div>
-
-              {/* Circular Initials (Subtle) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '120px', height: '120px', borderRadius: '60px', border: `1px solid ${isPink ? '#E11D48' : '#D4AF37'}`, marginBottom: '20px', color: isPink ? '#E11D48' : '#D4AF37', fontSize: '48px', opacity: 0.15 }}>
+              >
+                {/* Small decorative signs like in screenshot */}
+                <div style={{ position: 'absolute', top: '20px', fontSize: '14px', opacity: 0.5 }}>✦</div>
+                <div style={{ position: 'absolute', bottom: '20px', fontSize: '14px', opacity: 0.5 }}>✦</div>
                 {groom[0]}&{bride[0]}
               </div>
 
-              {/* The Names (Premium Look) */}
-              <div style={{ display: 'flex', fontSize: '80px', fontWeight: 'bold', color: '#1A1A1A', textAlign: 'center', marginBottom: '10px' }}>
-                {groom} & {bride}
+              {/* Bold Names */}
+              <div style={{ display: 'flex', fontSize: '48px', fontWeight: '900', color: '#000000', textAlign: 'center', marginBottom: '10px' }}>
+                {groom} <span style={{ color: '#9333EA', margin: '0 10px', fontSize: '32px' }}>&</span> {bride}
               </div>
 
-              <div style={{ fontSize: '24px', color: '#4B5563', letterSpacing: '4px', marginBottom: '40px' }}>
-                NIKOH TO'YI TAKLIFNOMASI
+              <div style={{ fontSize: '20px', color: '#111827', fontWeight: 'bold', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                Siz uchun maxsus taklifnoma
               </div>
 
-              {/* Date Badge */}
-              <div style={{ display: 'flex', padding: '14px 60px', backgroundColor: isPink ? '#E11D48' : '#D4AF37', borderRadius: '100px', color: 'white', fontSize: '32px', fontWeight: 'bold' }}>
-                {date}
+              <div style={{ fontSize: '14px', color: '#6B7280', textAlign: 'center', marginBottom: '30px', maxWidth: '300px', lineHeight: '1.4' }}>
+                Taklifnoma tafsilotlarini ko'rish uchun bosing.
+              </div>
+
+              {/* The Iconic Purple-Pink Gradient Button */}
+              <div
+                style={{
+                  display: 'flex',
+                  padding: '24px 80px',
+                  background: 'linear-gradient(to right, #9333EA, #EC4899)',
+                  borderRadius: '100px',
+                  color: 'white',
+                  fontSize: '24px',
+                  fontWeight: 'bold',
+                  boxShadow: '0 15px 30px rgba(147, 51, 234, 0.3)',
+                }}
+              >
+                Taklifnomani ochish →
               </div>
             </div>
+            
+            {/* Wax Seal Overlay if we have it */}
+            <img 
+               src="https://www.taklifnoma.asia/assets/gold-wax-seal.png"
+               style={{
+                 position: 'absolute',
+                 bottom: '80px',
+                 right: '120px',
+                 width: '140px',
+                 height: '140px',
+                 transform: 'rotate(15deg)',
+                 opacity: 0.9,
+                 zIndex: 3,
+               }}
+               alt="Wax Seal"
+             />
           </div>
       ),
       {
