@@ -50,9 +50,9 @@ export async function GET(req: NextRequest) {
               flexDirection: 'column',
             }}
           >
-            {/* THE PINK ENVELOPE BACKGROUND (premium-pink-bg.png) */}
+            {/* THE USER-PROVIDED MAIN BACKGROUND (main-bg-final.png) */}
             <img 
-              src="https://www.taklifnoma.asia/assets/premium-pink-bg.png?v=101"
+              src="https://www.taklifnoma.asia/assets/main-bg-final.png?v=200"
               style={{
                 position: 'absolute',
                 top: 0,
