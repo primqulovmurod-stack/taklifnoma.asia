@@ -49,33 +49,46 @@ export async function GET(req: NextRequest) {
 
     return new ImageResponse(
       (
-          {/* Main Container - Simple Background */}
           <div
             style={{
               display: 'flex',
               height: '100%',
               width: '100%',
-              backgroundColor: isPink ? '#FFF0F3' : styleConfig.bg,
-              backgroundImage: isPink 
-                ? 'radial-gradient(circle at center, #FFE4E6 0%, #FFF0F3 100%)' 
-                : styleConfig.gradient,
+              backgroundColor: '#FCE4EC',
               alignItems: 'center',
               justifyContent: 'center',
               position: 'relative',
-              padding: '40px',
+              overflow: 'hidden',
             }}
           >
+            {/* Background Image Layer */}
+            <img 
+              src="https://www.taklifnoma.asia/assets/floral-pearl.png"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '1200px',
+                height: '630px',
+                objectFit: 'cover',
+              }}
+              alt="Floral Background"
+            />
+
+            {/* Simple Overlay for Depth */}
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
+
             {/* The Central Card */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                backgroundColor: 'white',
-                padding: '50px',
-                borderRadius: '32px',
-                width: '800px',
-                border: `4px solid ${isPink ? '#E11D48' : styleConfig.accent}`,
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                padding: '50px 70px',
+                borderRadius: '40px',
+                width: '740px',
+                border: '1px solid rgba(255,255,255,0.8)',
               }}
             >
               {/* Circular Logo Initials */}
@@ -84,25 +97,26 @@ export async function GET(req: NextRequest) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '120px',
-                  height: '120px',
-                  borderRadius: '60px',
-                  backgroundColor: isPink ? '#FFF0F3' : '#111111',
-                  marginBottom: '20px',
-                  color: isPink ? '#E11D48' : styleConfig.accent,
-                  fontSize: '48px',
-                  fontWeight: 'bold',
+                  width: '160px',
+                  height: '160px',
+                  borderRadius: '100px',
+                  border: '1px solid #E11D48',
+                  marginBottom: '30px',
+                  color: '#E11D48',
+                  fontSize: '80px',
+                  fontFamily: 'serif',
+                  opacity: 0.2,
                 }}
               >
-                {groom[0]}{bride[0]}
+                {groom[0]}&{bride[0]}
               </div>
 
               {/* Names */}
               <div
                 style={{
                   display: 'flex',
-                  fontSize: '64px',
-                  fontWeight: '900',
+                  fontSize: '80px',
+                  fontWeight: 'bold',
                   color: '#1A1A1A',
                   textAlign: 'center',
                   marginBottom: '10px',
@@ -117,17 +131,19 @@ export async function GET(req: NextRequest) {
                   fontSize: '28px',
                   color: '#6B7280',
                   marginBottom: '30px',
+                  fontWeight: 600,
+                  letterSpacing: '2px',
                 }}
               >
-                Siz uchun maxsus taklifnoma
+                SIZ UCHUN MAXSUS TAKLIFNOMA
               </div>
 
               {/* Date */}
               <div
                 style={{
                   display: 'flex',
-                  padding: '16px 40px',
-                  backgroundColor: isPink ? '#E11D48' : styleConfig.accent,
+                  padding: '16px 50px',
+                  background: 'linear-gradient(to right, #E11D48, #FF4D94)',
                   borderRadius: '100px',
                   color: 'white',
                   fontSize: '32px',
@@ -136,21 +152,6 @@ export async function GET(req: NextRequest) {
               >
                 {date}
               </div>
-            </div>
-
-            {/* Site Name Watermark */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '40px',
-                color: isPink ? '#E11D48' : styleConfig.accent,
-                fontSize: '24px',
-                fontWeight: 'bold',
-                letterSpacing: '4px',
-                opacity: 0.3,
-              }}
-            >
-              TAKLIFNOMA.ASIA
             </div>
           </div>
       ),
