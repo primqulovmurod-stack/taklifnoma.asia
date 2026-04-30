@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
         gradient: isPink 
           ? 'radial-gradient(circle at center, #FFE4E6 0%, #FFF0F3 100%)' 
           : 'radial-gradient(circle at 50% 50%, #FAF3E0 0%, transparent 80%)',
-        label: "Nikoh To'yi Taklifnomasi"
+        label: "NIKOH TO'YI TAKLIFNOMASI"
     };
 
     return new ImageResponse(
