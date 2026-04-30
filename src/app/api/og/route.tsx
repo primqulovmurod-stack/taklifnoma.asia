@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
           >
             {/* THE GENERATED NIGHT BANQUET BACKGROUND (v400) */}
             <img 
-              src="https://taklifnoma.asia/assets/night-banquet-final.png?v=400"
+              src="https://taklifnoma.asia/assets/wedding-bg-new.jpg"
               style={{
                 position: 'absolute',
                 top: 0,
