@@ -44,7 +44,7 @@ export async function generateMetadata(
     date: date,
     theme: theme || 'luxury'
   }).toString();
-  const timestamp = invitation.created_at ? new Date(invitation.created_at).getTime() : Date.now();
+  const timestamp = Date.now();
   const ogImage = `${baseUrl}/api/preview-og?${ogSearchParams}&v=${timestamp}`;
 
     return {
@@ -57,6 +57,7 @@ export async function generateMetadata(
         siteName: 'Taklifnoma.Asia',
         locale: 'uz_UZ',
         type: 'website',
+        updatedTime: new Date().toISOString(),
         images: [
           {
             url: ogImage,
